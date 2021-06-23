@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="MultiWPFApp.View.View1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MultiWPFApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="450">
+    <UserControl.Resources>
+        <Style x:Key="LedButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                            <Border 
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="0"
+                                CornerRadius="8">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--<ItemsControl Grid.Row="0" ItemsSource="{Binding Path=Buttons}" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding ButtonContent}"
+                            Command="{Binding ButtonCommand}"
+                            CommandParameter="{Binding ButtonParameter}"
+                            Background="{Binding ButtonBackgroundColor}"
+                            Style="{StaticResource LedButtonStyle}"
+                            />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>-->
+        <Grid Grid.Row="0" Name="ButtonMatrixGrid" Margin="20"/>
+        <TextBlock Name="statusText" Grid.Row="1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" >TEST</TextBlock>
+    </Grid>
+</UserControl>
