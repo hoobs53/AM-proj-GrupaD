@@ -105,6 +105,7 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ButtonCommand.cs" />
     <Compile Include="ViewModel\ButtonCommandWithParameter.cs" />
+    <Compile Include="ViewModel\ConfigViewModel.cs" />
     <Compile Include="ViewModel\JoystickViewModel.cs" />
     <Compile Include="ViewModel\PHTViewModel.cs" />
     <Compile Include="ViewModel\RPYViewModel.cs" />
@@ -112,6 +113,9 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MeasurementViewModel.cs" />
     <Compile Include="ViewModel\DisplayViewModel.cs" />
+    <Compile Include="View\ConfigView.xaml.cs">
+      <DependentUpon>ConfigView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\JoystickView.xaml.cs">
       <DependentUpon>JoystickView.xaml</DependentUpon>
     </Compile>
@@ -134,6 +138,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\ConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\JoystickView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

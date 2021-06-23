@@ -28,6 +28,8 @@ namespace MultiWPFApp.ViewModel
 
         public ButtonCommand JoystickCommandView { get; set; }
 
+        public ButtonCommand ConfigCommandView { get; set; }
+
         public MainWindowViewModel()
         {
             DisplayCommandView = new ButtonCommand(MenuSetDisplayView);
@@ -39,6 +41,8 @@ namespace MultiWPFApp.ViewModel
             PHTCommandView = new ButtonCommand(MenuSetPHTView);
 
             JoystickCommandView = new ButtonCommand(MenuSetJoystickView);
+
+            ConfigCommandView = new ButtonCommand(MenuSetConfigView);
 
             ContentViewModel = new DisplayViewModel();
         }
@@ -66,6 +70,11 @@ namespace MultiWPFApp.ViewModel
         private void MenuSetJoystickView()
         {
             ContentViewModel = new JoystickViewModel();
+        }
+
+        private void MenuSetConfigView()
+        {
+            ContentViewModel = new ConfigViewModel();
         }
     }
 }

@@ -70,14 +70,15 @@ namespace MultiWPFApp.ViewModel
                 Unit = "sec",
                 Title = "Time"
             });
+
             DataPlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Minimum = 0,
-                Maximum = 360,
+                Maximum = 1500,
                 Key = "Vertical",
-                Unit = "*[deg]",
-                Title = "Orientation"
+                Unit = "hPA, %, *C",
+                Title = "Measurements"
             });
 
             // Adding series for each orientation
