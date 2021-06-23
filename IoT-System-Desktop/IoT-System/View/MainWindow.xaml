@@ -39,6 +39,10 @@
     <DataTemplate DataType="{x:Type viewmodel:JoystickViewModel}">
         <local:JoystickView />
     </DataTemplate>
+        
+    <DataTemplate DataType="{x:Type viewmodel:ConfigViewModel}">
+        <local:ConfigView />
+    </DataTemplate>
 
     </Window.Resources>
     <Grid>
@@ -53,6 +57,7 @@
             <Button Style="{StaticResource MenuButton}" Command="{Binding RPYCommandView}">RPY Chart</Button>
             <Button Style="{StaticResource MenuButton}" Command="{Binding PHTCommandView}">PHT Chart</Button>
             <Button Style="{StaticResource MenuButton}" Command="{Binding JoystickCommandView}">Joystick Chart</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding ConfigCommandView}">Config</Button>
         </StackPanel>
 
         <ContentControl Grid.Column="1" Content="{Binding ContentViewModel}"/>

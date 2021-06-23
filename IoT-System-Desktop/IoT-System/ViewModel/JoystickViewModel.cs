@@ -58,7 +58,7 @@ namespace MultiWPFApp.ViewModel
 
         public JoystickViewModel()
         {
-            DataPlotModel = new PlotModel { Title = "Joystick data" };
+            DataPlotModel = new PlotModel { Title = "Joystick position data" };
 
             //Adding X and Y axis
             DataPlotModel.Axes.Add(new LinearAxis()
@@ -73,17 +73,15 @@ namespace MultiWPFApp.ViewModel
             DataPlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
-                Minimum = 0,
-                Maximum = 360,
+                Minimum = -20,
+                Maximum = 20,
                 Key = "Vertical",
-                Unit = "*[deg]",
-                Title = "Orientation"
+                Unit = "-",
+                Title = "Coordinates"
             });
 
             // Adding series for each orientation
-            DataPlotModel.Series.Add(new LineSeries() { Title = "x", Color = OxyColor.Parse("#FFFF0000") });
-            DataPlotModel.Series.Add(new LineSeries() { Title = "y", Color = OxyColor.Parse("#FF00FF00") });
-            DataPlotModel.Series.Add(new LineSeries() { Title = "mid_counter", Color = OxyColor.Parse("#FF0000FF") });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "Point position", Color = OxyColor.Parse("#FFFF0000") });
 
             // Initializing buttons
             StartButton = new ButtonCommand(StartTimer);
