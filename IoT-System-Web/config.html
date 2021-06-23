@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Configuration page</title>
+	<meta charset="utf-8">
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">	
+	<script type="text/javascript" src="js/config.js"></script> 
+	<link rel="stylesheet" type="text/css" href="css/config.css">
+</head>
+<body>
+<h1 class="text-center">Config params</h1>
+<div class="container border border-primary rounded config_cont" id="config_cont">
+	<form class="w3-container">
+		<label>Sample time:</label>
+		<input type="number" value="200" class="input border rounded" id="sample"> <br>
+		<label>Sample amount:</label>
+		<input type="number" value="100" class="input border rounded" id="sample_amount"> <br>
+		<label>IP:</label>
+		<input type="text" value="192.168.0.101" class="input border rounded" id="ip"> <br>
+	</form>
+	<button id="set" class="btn btn-primary save_btn" type="button">Save config</button>
+</div>
+</body>
+</html>
