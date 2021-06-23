@@ -18,36 +18,54 @@ namespace MultiWPFApp.ViewModel
             }
         }
 
-        public ButtonCommand MenuCommandView1 { get; set; }
+        public ButtonCommand DisplayCommandView { get; set; }
 
-        public ButtonCommand MenuCommandView2 { get; set; }
+        public ButtonCommand ListCommandView { get; set; }
 
-        public ButtonCommand MenuCommandView3 { get; set; }
+        public ButtonCommand RPYCommandView { get; set; }
+
+        public ButtonCommand PHTCommandView { get; set; }
+
+        public ButtonCommand JoystickCommandView { get; set; }
 
         public MainWindowViewModel()
         {
-            MenuCommandView1 = new ButtonCommand(MenuSetView1);
+            DisplayCommandView = new ButtonCommand(MenuSetDisplayView);
 
-            MenuCommandView2 = new ButtonCommand(MenuSetView2);
+            ListCommandView = new ButtonCommand(MenuSetListView);
 
-            MenuCommandView3 = new ButtonCommand(MenuSetView3);
+            RPYCommandView = new ButtonCommand(MenuSetRPYView);
 
-            ContentViewModel = new View1_ViewModel();
+            PHTCommandView = new ButtonCommand(MenuSetPHTView);
+
+            JoystickCommandView = new ButtonCommand(MenuSetJoystickView);
+
+            ContentViewModel = new DisplayViewModel();
         }
 
-        private void MenuSetView1()
+        private void MenuSetDisplayView()
         {
-            ContentViewModel = new View1_ViewModel();
+            ContentViewModel = new DisplayViewModel();
         }
 
-        private void MenuSetView2()
+        private void MenuSetListView()
         {
             ContentViewModel = new ListViewModel();
         }
 
-        private void MenuSetView3()
+        private void MenuSetRPYView()
         {
-            ContentViewModel = new ChartViewModel();
+            ContentViewModel = new RPYViewModel();
+        }
+
+        private void MenuSetPHTView()
+        {
+            ContentViewModel = new PHTViewModel();
+        }
+
+        private void MenuSetJoystickView()
+        {
+            ContentViewModel = new JoystickViewModel();
         }
     }
 }

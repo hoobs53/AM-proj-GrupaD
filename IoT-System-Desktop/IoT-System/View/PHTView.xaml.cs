@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace MultiWPFApp.View
 {
     /// <summary>
-    /// Interaction logic for ChartView.xaml
+    /// Interaction logic for PHTView.xaml
     /// </summary>
-    public partial class ChartView : UserControl
+    public partial class PHTView : UserControl
     {
-        public ChartView()
+        public PHTView()
         {
             InitializeComponent();
         }
