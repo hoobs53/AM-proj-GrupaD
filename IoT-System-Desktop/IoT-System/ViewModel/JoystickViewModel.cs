@@ -108,7 +108,7 @@ namespace MultiWPFApp.ViewModel
             yLineSeries.Points.Add(new DataPoint(t, p));
             midLineSeries.Points.Add(new DataPoint(t, y));
 
-            if (xLineSeries.Points.Count > config.MaxSampleNumber)
+            if (xLineSeries.Points.Count > config.maxSampleDefault)
             {
                 xLineSeries.Points.RemoveAt(0);
                 yLineSeries.Points.RemoveAt(0);

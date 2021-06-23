@@ -108,7 +108,7 @@ namespace MultiWPFApp.ViewModel
             humidityLineSeries.Points.Add(new DataPoint(t, p));
             temperatureLineSeries.Points.Add(new DataPoint(t, y));
 
-            if (pressureLineSeries.Points.Count > config.MaxSampleNumber)
+            if (pressureLineSeries.Points.Count > config.maxSampleDefault)
             {
                 pressureLineSeries.Points.RemoveAt(0);
                 humidityLineSeries.Points.RemoveAt(0);

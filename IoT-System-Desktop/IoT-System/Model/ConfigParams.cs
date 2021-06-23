@@ -8,17 +8,15 @@ namespace MultiWPFApp.Model
     public class ConfigParams
     {
         private ConfigData configData;
-        static readonly string ipAddressDefault = "192.168.1.104";
+        static readonly string urlDefault = "192.168.1.104";
         public string Url;
+
         static readonly int sampleTimeDefault = 500;
         public int SampleTime;
-        public readonly int MaxSampleNumber = 100;
 
-        static readonly string apiDefault = "20";
-        public string Api;
+        public readonly int maxSampleDefault = 100;
+        public int MaxSample;
 
-        static readonly string portDefault = "80";
-        public string Port;
         private void LoadConfig()
         {
             using (StreamReader r = new StreamReader("config.json"))
@@ -31,7 +29,7 @@ namespace MultiWPFApp.Model
         {
             get
             {
-                return MaxSampleNumber * SampleTime / 1000.0;
+                return maxSampleDefault * SampleTime / 1000.0;
             }
             private set { }
         }
@@ -44,44 +42,37 @@ namespace MultiWPFApp.Model
                 {
                     Url = configData.url;
                     SampleTime = configData.sample_time;
-                    Api = configData.api;
-                    Port = configData.port;
+                    MaxSample = configData.sample_amount;
                 }
                 else
                 {
-                    Url = ipAddressDefault;
+                    Url = urlDefault;
                     SampleTime = sampleTimeDefault;
-                    Api = apiDefault;
-                    Port = portDefault;
+                    MaxSample = maxSampleDefault;
                 }
             }
             catch (Exception e)
             {
-                Url = ipAddressDefault;
+                Url = urlDefault;
                 SampleTime = sampleTimeDefault;
-                Api = apiDefault;
-                Port = portDefault;
+                MaxSample = maxSampleDefault;
                 Debug.WriteLine(e);
             }
         }
 
-        public ConfigParams(string ip, int st)
+        public ConfigParams(string ip, int st, int ms)
         {
             try
             {
                 LoadConfig();
-                Port = configData.port;
-                Api = configData.api;
             }
             catch (Exception e)
             {
-                Api = apiDefault;
-                Port = portDefault;
                 Debug.WriteLine(e);
             }
             Url = ip;
             SampleTime = st;
-
+            MaxSample = ms;
         }
     }
 }
