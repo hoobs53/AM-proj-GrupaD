@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="MultiWPFApp.View.ListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MultiWPFApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="550">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center">Measurements</TextBlock>
+        <ListView Grid.Row="1" ItemsSource="{Binding Measurements}">
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Data}"/>
+                    <GridViewColumn Header="Unit" Width="100" DisplayMemberBinding="{Binding Unit}"/>
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+        <TextBlock Grid.Row="2" HorizontalAlignment="Center">Orientation</TextBlock>
+        <ListView Grid.Row="3" ItemsSource="{Binding Orientation}">
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Data}"/>
+                    <GridViewColumn Header="Unit" Width="100" DisplayMemberBinding="{Binding Unit}"/>
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+        <TextBlock Grid.Row="4" HorizontalAlignment="Center">Joystick</TextBlock>
+        <ListView Grid.Row="5" ItemsSource="{Binding Joystick}">
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Data}"/>
+                    <GridViewColumn Header="Unit" Width="100" DisplayMemberBinding="{Binding Unit}"/>
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+
+        <Button Grid.Row="6" Width="150" Margin="0,10" Command="{Binding Refresh}">REFRESH</Button>
+
+    </Grid>
+</UserControl>
