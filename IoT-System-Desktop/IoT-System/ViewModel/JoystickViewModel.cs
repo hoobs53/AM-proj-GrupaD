@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace MultiWPFApp.ViewModel
 {
     using Model;
-    public class ChartViewModel : BaseViewModel
+    public class JoystickViewModel : BaseViewModel
     {
         private string url;
         public string Url
@@ -56,9 +56,9 @@ namespace MultiWPFApp.ViewModel
         private ServerIoT server;
 
 
-        public ChartViewModel()
+        public JoystickViewModel()
         {
-            DataPlotModel = new PlotModel { Title = "Orientation data" };
+            DataPlotModel = new PlotModel { Title = "Joystick data" };
 
             //Adding X and Y axis
             DataPlotModel.Axes.Add(new LinearAxis()
@@ -81,9 +81,9 @@ namespace MultiWPFApp.ViewModel
             });
 
             // Adding series for each orientation
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Roll", Color = OxyColor.Parse("#FFFF0000") });
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Pitch", Color = OxyColor.Parse("#FF00FF00") });
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Yaw", Color = OxyColor.Parse("#FF0000FF") });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "x", Color = OxyColor.Parse("#FFFF0000") });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "y", Color = OxyColor.Parse("#FF00FF00") });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "mid_counter", Color = OxyColor.Parse("#FF0000FF") });
 
             // Initializing buttons
             StartButton = new ButtonCommand(StartTimer);
@@ -100,19 +100,19 @@ namespace MultiWPFApp.ViewModel
         // Update plot with new data points
         private void UpdatePlot(double t, double r, double p, double y)
         {
-            LineSeries rollLineSeries = DataPlotModel.Series[0] as LineSeries;
-            LineSeries pitchLineSeries = DataPlotModel.Series[1] as LineSeries;
-            LineSeries yawLineSeries = DataPlotModel.Series[2] as LineSeries;
+            LineSeries xLineSeries = DataPlotModel.Series[0] as LineSeries;
+            LineSeries yLineSeries = DataPlotModel.Series[1] as LineSeries;
+            LineSeries midLineSeries = DataPlotModel.Series[2] as LineSeries;
 
-            rollLineSeries.Points.Add(new DataPoint(t, r));
-            pitchLineSeries.Points.Add(new DataPoint(t, p));
-            yawLineSeries.Points.Add(new DataPoint(t, y));
+            xLineSeries.Points.Add(new DataPoint(t, r));
+            yLineSeries.Points.Add(new DataPoint(t, p));
+            midLineSeries.Points.Add(new DataPoint(t, y));
 
-            if (rollLineSeries.Points.Count > config.MaxSampleNumber)
+            if (xLineSeries.Points.Count > config.MaxSampleNumber)
             {
-                rollLineSeries.Points.RemoveAt(0);
-                pitchLineSeries.Points.RemoveAt(0);
-                yawLineSeries.Points.RemoveAt(0);
+                xLineSeries.Points.RemoveAt(0);
+                yLineSeries.Points.RemoveAt(0);
+                midLineSeries.Points.RemoveAt(0);
             }
 
 

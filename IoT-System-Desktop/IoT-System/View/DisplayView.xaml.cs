@@ -19,18 +19,18 @@ namespace MultiWPFApp.View
     /// <summary>
     /// Interaction logic for View1.xaml
     /// </summary>
-    public partial class View1 : UserControl
+    public partial class DisplayView : UserControl
     {
         private bool created = false;
-        private View1_ViewModel viewmodel;
-        public View1()
+        private DisplayViewModel viewmodel;
+        public DisplayView()
         {
             InitializeComponent();
             DataContextChanged += new DependencyPropertyChangedEventHandler(DataContextChangedHandler);
         }
         private void DataContextChangedHandler(object sender, DependencyPropertyChangedEventArgs e)
         {
-            viewmodel = (DataContext as View1_ViewModel);
+            viewmodel = (DataContext as DisplayViewModel);
             if(viewmodel != null)
             {
                 viewmodel.CodeBehindHandler = ChangeColor;
@@ -40,7 +40,6 @@ namespace MultiWPFApp.View
         }
         private void ChangeColor(object param)
         {
-            statusText.Text = param.ToString();
             (ButtonMatrixGrid.FindName(param.ToString()) as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
         }
         private void initButtons()

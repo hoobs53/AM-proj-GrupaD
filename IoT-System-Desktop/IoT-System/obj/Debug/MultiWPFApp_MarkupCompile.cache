@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Hubs\Documents\GitHub\AM-proj-ServerScripts\IoT-System-Desktop\IoT-System\App.xaml
-42004421448
+61101187490
 
-211925697063
+25734501790
 134-1295053053
-View\ChartView.xaml;View\ListView.xaml;View\MainWindow.xaml;View\View1.xaml;
+View\JoystickView.xaml;View\PHTView.xaml;View\RPYView.xaml;View\ListView.xaml;View\MainWindow.xaml;View\DisplayView.xaml;
 
 False
 

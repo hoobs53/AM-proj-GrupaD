@@ -105,13 +105,21 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ButtonCommand.cs" />
     <Compile Include="ViewModel\ButtonCommandWithParameter.cs" />
-    <Compile Include="ViewModel\ChartViewModel.cs" />
+    <Compile Include="ViewModel\JoystickViewModel.cs" />
+    <Compile Include="ViewModel\PHTViewModel.cs" />
+    <Compile Include="ViewModel\RPYViewModel.cs" />
     <Compile Include="ViewModel\ListViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MeasurementViewModel.cs" />
-    <Compile Include="ViewModel\View1_ViewModel.cs" />
-    <Compile Include="View\ChartView.xaml.cs">
-      <DependentUpon>ChartView.xaml</DependentUpon>
+    <Compile Include="ViewModel\DisplayViewModel.cs" />
+    <Compile Include="View\JoystickView.xaml.cs">
+      <DependentUpon>JoystickView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PHTView.xaml.cs">
+      <DependentUpon>PHTView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RPYView.xaml.cs">
+      <DependentUpon>RPYView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ListView.xaml.cs">
       <DependentUpon>ListView.xaml</DependentUpon>
@@ -119,14 +127,22 @@
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\View1.xaml.cs">
-      <DependentUpon>View1.xaml</DependentUpon>
+    <Compile Include="View\DisplayView.xaml.cs">
+      <DependentUpon>DisplayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ChartView.xaml">
+    <Page Include="View\JoystickView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PHTView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RPYView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,7 +154,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\View1.xaml">
+    <Page Include="View\DisplayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

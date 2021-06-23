@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Hubs\source\repos\MultiWPFApp\MultiWPFApp\obj\Debug\
+C:\Users\Hubs\Documents\GitHub\AM-proj-ServerScripts\IoT-System-Desktop\IoT-System\obj\Debug\
 MultiWPFApp
 none
 false
 DEBUG;TRACE
-C:\Users\Hubs\source\repos\MultiWPFApp\MultiWPFApp\App.xaml
-42004421448
+C:\Users\Hubs\Documents\GitHub\AM-proj-ServerScripts\IoT-System-Desktop\IoT-System\App.xaml
+61101187490
 
-221083337696
-134-182416446
-View\ChartView.xaml;View\ListView.xaml;View\MainWindow.xaml;View\View1.xaml;
+26-107857577
+134-1295053053
+View\JoystickView.xaml;View\PHTView.xaml;View\RPYView.xaml;View\ListView.xaml;View\MainWindow.xaml;View\DisplayView.xaml;
 
-False
+True
 

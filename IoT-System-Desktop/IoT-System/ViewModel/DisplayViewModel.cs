@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace MultiWPFApp.ViewModel
 {
-    public class View1_ViewModel : BaseViewModel
+    public class DisplayViewModel : BaseViewModel
     {
         public Action<object> CodeBehindHandler{ get; set; }
 
@@ -12,7 +12,7 @@ namespace MultiWPFApp.ViewModel
 
         public ButtonCommandWithParameter CommonButtonCommand { get; set; }
 
-        public View1_ViewModel()
+        public DisplayViewModel()
         {
             for(int i=0; i<8; i++)
             {

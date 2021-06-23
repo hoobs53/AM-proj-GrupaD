@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MultiWPFApp.View"
         xmlns:viewmodel="clr-namespace:MultiWPFApp.ViewModel"
         mc:Ignorable="d"
-        Title="IoT System" Height="450" Width="800">
+        Title="IoT System" Height="600" Width="650">
     <Window.DataContext>
         <viewmodel:MainWindowViewModel/>
     </Window.DataContext>
@@ -20,17 +20,25 @@
             <Setter Property="Width" Value="110"/>
         </Style>
         
-    <DataTemplate DataType="{x:Type viewmodel:View1_ViewModel}">
-        <local:View1 />
+    <DataTemplate DataType="{x:Type viewmodel:DisplayViewModel}">
+        <local:DisplayView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodel:ListViewModel}">
         <local:ListView />
     </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewmodel:ChartViewModel}">
-            <local:ChartView />
-        </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodel:RPYViewModel}">
+        <local:RPYView />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type viewmodel:PHTViewModel}">
+        <local:PHTView />
+    </DataTemplate>
+        
+    <DataTemplate DataType="{x:Type viewmodel:JoystickViewModel}">
+        <local:JoystickView />
+    </DataTemplate>
 
     </Window.Resources>
     <Grid>
@@ -40,9 +48,11 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" >
-            <Button Style="{StaticResource MenuButton}" Command="{Binding MenuCommandView1}">LED Display</Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding MenuCommandView2}">List View </Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding MenuCommandView3}">Data Grabber</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding DisplayCommandView}">LED Display</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding ListCommandView}">List View </Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding RPYCommandView}">RPY Chart</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding PHTCommandView}">PHT Chart</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding JoystickCommandView}">Joystick Chart</Button>
         </StackPanel>
 
         <ContentControl Grid.Column="1" Content="{Binding ContentViewModel}"/>
