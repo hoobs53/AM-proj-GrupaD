@@ -108,7 +108,7 @@ namespace MultiWPFApp.ViewModel
             pitchLineSeries.Points.Add(new DataPoint(t, p));
             yawLineSeries.Points.Add(new DataPoint(t, y));
 
-            if (rollLineSeries.Points.Count > config.MaxSampleNumber)
+            if (rollLineSeries.Points.Count > config.maxSampleDefault)
             {
                 rollLineSeries.Points.RemoveAt(0);
                 pitchLineSeries.Points.RemoveAt(0);
