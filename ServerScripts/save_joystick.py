@@ -5,7 +5,7 @@ import json
 from sense_hat import SenseHat, ACTION_RELEASED
 sense = SenseHat()
 try:
-	with open ("joystick.dat") as f:
+	with open ("joystick.json") as f:
 		data = json.load(f)
 		x = data['x']
 		y = data['y']
@@ -46,7 +46,7 @@ try:
 	while True:
 		dict = {"x": x, "y": y, "mid_counter": mid_counter}
 		result = json.dumps(dict)
-		with open("joystick.dat", "w") as f:
+		with open("joystick.json", "w") as f:
 			f.write(result)
 		time.sleep(0.05)
 except KeyboardInterrupt:
