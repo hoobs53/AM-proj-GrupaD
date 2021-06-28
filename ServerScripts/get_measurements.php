@@ -8,7 +8,7 @@ $measurements = json_decode($measurements, true);
 $orientation = file_get_contents("rpy.json");
 $orientation = json_decode($orientation, true);
 
-$joystick = file_get_contents("joystick.dat");
+$joystick = file_get_contents("joystick.json");
 $joystick = json_decode($joystick, true);
 
 $measurement_result = array();
