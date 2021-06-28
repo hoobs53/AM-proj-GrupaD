@@ -1,0 +1,49 @@
+.seekbars {
+	width: 100%;
+}
+
+.slider {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 100%;
+	heigth: 25px;
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+}
+
+.title {
+	font-size: 23px;
+}
+
+.status {
+	font-size:25px;
+}
+
+.slider:hover {
+	opacity: 1;
+}
+
+.ledmatrix {
+	width: 572px;
+	height: 800px;
+}
+
+
+.ledcontrol {
+	width: 572px;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+.led_matrix {
+	padding-left: 20px;
+}
+
+.pad_top {
+	margin-top: 15px;
+}
