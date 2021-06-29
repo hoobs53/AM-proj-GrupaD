@@ -51,33 +51,35 @@
     </UserControl.Resources>
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
             <RowDefinition Height="391*" />
             <RowDefinition Height="89*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Name="ButtonMatrixGrid" Margin="20"/>
-        <StackPanel  Grid.Row="1" VerticalAlignment="Center" Margin="20,0">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="20" Text="{Binding Status}" />
+        <Grid Grid.Row="1" Name="ButtonMatrixGrid" Margin="20"/>
+        <StackPanel  Grid.Row="2" VerticalAlignment="Center" Margin="20,0">
             <DockPanel>
                 <TextBlock VerticalAlignment="Center" Text="R" 
                            FontSize="22" Margin="0,0,5,0" Width="20"/>
-                <Slider Minimum="0" Maximum="255" Style="{StaticResource ColorSlider}" 
+                <Slider Minimum="0" Maximum="248" Style="{StaticResource ColorSlider}" 
                         Value="{Binding R}"  Foreground="Red"/>
             </DockPanel>
             <DockPanel>
                 <TextBlock VerticalAlignment="Center" Text="G" 
                            FontSize="22" Margin="0,0,5,0"  Width="20"/>
-                <Slider Minimum="0" Maximum="255" Style="{StaticResource ColorSlider}" 
+                <Slider Minimum="0" Maximum="248" Style="{StaticResource ColorSlider}" 
                         Value="{Binding G}"  Foreground="Green"/>
             </DockPanel>
             <DockPanel>
                 <TextBlock VerticalAlignment="Center" Text="B"
                            FontSize="22" Margin="0,0,5,0"  Width="20"/>
-                <Slider Minimum="0" Maximum="255" Style="{StaticResource ColorSlider}" 
+                <Slider Minimum="0" Maximum="248" Style="{StaticResource ColorSlider}" 
                         Value="{Binding B}"  Foreground="Blue"/>
             </DockPanel>
         </StackPanel>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
