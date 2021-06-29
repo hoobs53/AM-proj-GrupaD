@@ -60,14 +60,15 @@ namespace MultiWPFApp.Model
             _activeColorB = OffColor.B;
 
             int cnt = 0;
-            for (int i = 0; i < SizeX; i++)
+            for (int j = 0; j < SizeX; j++)
             {
-                for (int j = 0; j < SizeY; j++)
+                for (int i = 0; i < SizeY; i++)
                 {
 
                     model[i, j, 0] = (byte)pixelsState[cnt][0];
                     model[i, j, 1] = (byte)pixelsState[cnt][1];
                     model[i, j, 2] = (byte)pixelsState[cnt][2];
+                    cnt++;
                 }
             }
             pixels = pixelsState;
@@ -181,16 +182,23 @@ namespace MultiWPFApp.Model
         public List<KeyValuePair<string, string>> getControlPostData()
         {
             var postData = new List<KeyValuePair<string, string>>();
+            ushort? r, g, b;
             for (int i = 0; i < SizeX; i++)
             {
                 for (int j = 0; j < SizeY; j++)
                 {
-                    if (ColorNotNull(i, j))
+                    //if (ColorNotNull(i, j))
                         postData.Add(
                             new KeyValuePair<string, string>(
                                 "LED" + i.ToString() + j.ToString(),
                                 IndexToJsonArray(i, j).ToString()
                                 ));
+                    r = model[i, j, 0];
+                    g = model[i, j, 1];
+                    b = model[i, j, 2];
+                    currentModel[i, j, 0] = r;
+                    currentModel[i, j, 1] = g;
+                    currentModel[i, j, 2] = b;
                 }
             }
             return postData;
