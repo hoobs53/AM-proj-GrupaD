@@ -130,7 +130,7 @@ namespace MultiWPFApp.ViewModel
         private async void UpdatePlot()
         {
 
-            string responseText = await server.POSTwithClient("pht");
+            string responseText = await server.POSTwithClient("resource.php", "pht");
 
             try
             {

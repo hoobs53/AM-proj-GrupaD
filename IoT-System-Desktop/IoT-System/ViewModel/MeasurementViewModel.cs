@@ -68,7 +68,7 @@ namespace MultiWPFApp.ViewModel
         {
             _name = model.Name;
             OnPropertyChanged("Name");
-            _data = model.Data;
+            _data = model.Value;
             OnPropertyChanged("Data");
             _unit = model.Unit;
             OnPropertyChanged("Unit");

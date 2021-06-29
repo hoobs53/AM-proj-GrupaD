@@ -29,7 +29,6 @@ namespace MultiWPFApp.Model
 
             return JArray.Parse(jsonText);
         }
-
         public JArray getOrientation()
         {
             string jsonText = "[";
@@ -98,35 +97,21 @@ namespace MultiWPFApp.Model
             return "http://" + ip + "/" + file + ".json";
         }
 
-        private string GetScriptUrl()
+        private string GetScriptUrl(string script)
         {
-            return "http://" + ip + "/resource.php";
+            return "http://" + ip + "/" + script;
         }
         private string GetPixelsUrl()
         {
             return "http://" + ip + "/cgi-bin/get_pixels2.py";
         }
-        //public async Task<string> GETwithClient()
-        //{
-        //    string responseText = null;
 
-        //    try
-        //    {
-        //        using (HttpClient client = new HttpClient())
-        //        {
-        //            responseText = await client.GetStringAsync(GetFileUrl());
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine("NETWORK ERROR");
-        //        Debug.WriteLine(e);
-        //    }
+        private string GetMeasurementsUrl()
+        {
+            return "http://" + ip + "/get_measurements.php";
+        }
 
-        //    return responseText;
-        //}
-
-        public async Task<string> POSTwithClient(string file)
+        public async Task<string> POSTwithClient(string script, string file)
         {
             string responseText = null;
 
@@ -139,7 +124,7 @@ namespace MultiWPFApp.Model
                     requestDataCollection.Add(new KeyValuePair<string, string>("filename", file));
                     var requestData = new FormUrlEncodedContent(requestDataCollection);
                     // Sent POST request
-                    var result = await client.PostAsync(GetScriptUrl(), requestData);
+                    var result = await client.PostAsync(GetScriptUrl(script), requestData);
                     // Read response content
                     responseText = await result.Content.ReadAsStringAsync();
                 }
@@ -156,6 +141,18 @@ namespace MultiWPFApp.Model
         public string POSTgetPixels()
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetPixelsUrl());
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream receiveStream = response.GetResponseStream();
+            StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
+            string result = readStream.ReadToEnd();
+            response.Close();
+            readStream.Close();
+            return result;
+        }
+
+        public string POSTgetMeasurements()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetMeasurementsUrl());
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             Stream receiveStream = response.GetResponseStream();
             StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
@@ -191,40 +188,40 @@ namespace MultiWPFApp.Model
         //    return responseText;
         //}
 
-        public async Task<string> POSTwithRequest()
-        {
-            string responseText = null;
+        //public async Task<string> POSTwithRequest()
+        //{
+        //    string responseText = null;
 
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetScriptUrl());
+        //    try
+        //    {
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetScriptUrl());
 
-                // POST Request data 
-                var requestData = "filename=chartdata";
-                byte[] byteArray = Encoding.UTF8.GetBytes(requestData);
-                // POST Request configuration
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.ContentLength = byteArray.Length;
-                // Wrire data to request stream
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Close();
+        //        // POST Request data 
+        //        var requestData = "filename=chartdata";
+        //        byte[] byteArray = Encoding.UTF8.GetBytes(requestData);
+        //        // POST Request configuration
+        //        request.Method = "POST";
+        //        request.ContentType = "application/x-www-form-urlencoded";
+        //        request.ContentLength = byteArray.Length;
+        //        // Wrire data to request stream
+        //        Stream dataStream = request.GetRequestStream();
+        //        dataStream.Write(byteArray, 0, byteArray.Length);
+        //        dataStream.Close();
 
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    responseText = await reader.ReadToEndAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("NETWORK ERROR");
-                Debug.WriteLine(e);
-            }
+        //        using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+        //        using (Stream stream = response.GetResponseStream())
+        //        using (StreamReader reader = new StreamReader(stream))
+        //        {
+        //            responseText = await reader.ReadToEndAsync();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine("NETWORK ERROR");
+        //        Debug.WriteLine(e);
+        //    }
 
-            return responseText;
-        }
+        //    return responseText;
+        //}
     }
 }
