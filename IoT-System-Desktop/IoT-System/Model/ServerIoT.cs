@@ -94,9 +94,9 @@ namespace MultiWPFApp.Model
             return responseText;
         }
 
-        private string GetFileUrl()
+        private string GetFileUrl(string file)
         {
-            return "http://" + ip + "/chartdata.json";
+            return "http://" + ip + "/" + file + ".json";
         }
 
         private string GetScriptUrl()
@@ -107,27 +107,27 @@ namespace MultiWPFApp.Model
         {
             return "http://" + ip + "/cgi-bin/get_pixels.py";
         }
-        public async Task<string> GETwithClient()
-        {
-            string responseText = null;
+        //public async Task<string> GETwithClient()
+        //{
+        //    string responseText = null;
 
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    responseText = await client.GetStringAsync(GetFileUrl());
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("NETWORK ERROR");
-                Debug.WriteLine(e);
-            }
+        //    try
+        //    {
+        //        using (HttpClient client = new HttpClient())
+        //        {
+        //            responseText = await client.GetStringAsync(GetFileUrl());
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine("NETWORK ERROR");
+        //        Debug.WriteLine(e);
+        //    }
 
-            return responseText;
-        }
+        //    return responseText;
+        //}
 
-        public async Task<string> POSTwithClient()
+        public async Task<string> POSTwithClient(string file)
         {
             string responseText = null;
 
@@ -137,7 +137,7 @@ namespace MultiWPFApp.Model
                 {
                     // POST request data
                     var requestDataCollection = new List<KeyValuePair<string, string>>();
-                    requestDataCollection.Add(new KeyValuePair<string, string>("filename", "chartdata"));
+                    requestDataCollection.Add(new KeyValuePair<string, string>("filename", file));
                     var requestData = new FormUrlEncodedContent(requestDataCollection);
                     // Sent POST request
                     var result = await client.PostAsync(GetScriptUrl(), requestData);
@@ -156,7 +156,7 @@ namespace MultiWPFApp.Model
 
         public string POSTgetPixels()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://192.168.1.104/cgi-bin/get_pixels2.py");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetPixelsUrl());
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             Stream receiveStream = response.GetResponseStream();
             StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
@@ -166,31 +166,31 @@ namespace MultiWPFApp.Model
             return result;
         }
 
-        public async Task<string> GETwithRequest()
-        {
-            string responseText = null;
+        //public async Task<string> GETwithRequest()
+        //{
+        //    string responseText = null;
 
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetFileUrl());
+        //    try
+        //    {
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetFileUrl());
 
-                request.Method = "GET";
+        //        request.Method = "GET";
 
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    responseText = await reader.ReadToEndAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("NETWORK ERROR");
-                Debug.WriteLine(e);
-            }
+        //        using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+        //        using (Stream stream = response.GetResponseStream())
+        //        using (StreamReader reader = new StreamReader(stream))
+        //        {
+        //            responseText = await reader.ReadToEndAsync();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine("NETWORK ERROR");
+        //        Debug.WriteLine(e);
+        //    }
 
-            return responseText;
-        }
+        //    return responseText;
+        //}
 
         public async Task<string> POSTwithRequest()
         {

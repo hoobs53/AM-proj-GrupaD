@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MultiWPFApp.Model
 {
-    public class ChartData
+    public class RPYData
     {
         public double Roll { get; set; }
         public double Pitch { get; set; }

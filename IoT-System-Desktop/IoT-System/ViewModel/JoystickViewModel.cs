@@ -43,6 +43,34 @@ namespace MultiWPFApp.ViewModel
             }
         }
 
+        private string xPoint;
+        public string XPoint
+        {
+            get { return xPoint; }
+            set
+            {
+                if (xPoint != value)
+                {
+                    xPoint = value;
+                    OnPropertyChanged("XPoint");
+                }
+            }
+        }
+
+        private string yPoint;
+        public string YPoint
+        {
+            get { return yPoint; }
+            set
+            {
+                if (yPoint != value)
+                {
+                    yPoint = value;
+                    OnPropertyChanged("YPoint");
+                }
+            }
+        }
+
         //Initialize variables and models
         public PlotModel DataPlotModel { get; set; }
         public ButtonCommand StartButton { get; set; }
@@ -64,20 +92,20 @@ namespace MultiWPFApp.ViewModel
             DataPlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
-                Minimum = 0,
-                Maximum = config.XAxisMax,
+                Minimum = -25,
+                Maximum = 25,
                 Key = "Horizontal",
-                Unit = "sec",
-                Title = "Time"
+                Unit = "-",
+                Title = "Coordinate x"
             });
             DataPlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
-                Minimum = -20,
-                Maximum = 20,
+                Minimum = -25,
+                Maximum = 25,
                 Key = "Vertical",
                 Unit = "-",
-                Title = "Coordinates"
+                Title = "Coordinate y"
             });
 
             // Adding series for each orientation
@@ -96,24 +124,21 @@ namespace MultiWPFApp.ViewModel
         }
 
         // Update plot with new data points
-        private void UpdatePlot(double t, double r, double p, double y)
+        private void UpdatePlot(double t, double x, double y)
         {
             LineSeries xLineSeries = DataPlotModel.Series[0] as LineSeries;
-            LineSeries yLineSeries = DataPlotModel.Series[1] as LineSeries;
-            LineSeries midLineSeries = DataPlotModel.Series[2] as LineSeries;
-
-            xLineSeries.Points.Add(new DataPoint(t, r));
-            yLineSeries.Points.Add(new DataPoint(t, p));
-            midLineSeries.Points.Add(new DataPoint(t, y));
-
-            if (xLineSeries.Points.Count > config.maxSampleDefault)
-            {
-                xLineSeries.Points.RemoveAt(0);
-                yLineSeries.Points.RemoveAt(0);
-                midLineSeries.Points.RemoveAt(0);
-            }
 
 
+            xLineSeries.Points.Add(new DataPoint(x, y));
+
+            //if (xLineSeries.Points.Count > config.maxSampleDefault)
+            //{
+            //    xLineSeries.Points.RemoveAt(0);
+            //    yLineSeries.Points.RemoveAt(0);
+            //}
+
+            XPoint = x.ToString();
+            YPoint = y.ToString();
             if (t >= config.XAxisMax)
             {
                 DataPlotModel.Axes[0].Minimum = (t - config.XAxisMax);
@@ -127,12 +152,12 @@ namespace MultiWPFApp.ViewModel
         private async void UpdatePlot()
         {
 
-            string responseText = await server.POSTwithClient();
+            string responseText = await server.POSTwithClient("joystick");
 
             try
             {
-                ChartData responseJson = JsonConvert.DeserializeObject<ChartData>(responseText);
-                UpdatePlot(timeStamp / 1000.0, responseJson.Roll, responseJson.Pitch, responseJson.Yaw);
+                JoystickData responseJson = JsonConvert.DeserializeObject<JoystickData>(responseText);
+                UpdatePlot(timeStamp / 1000.0, responseJson.x, responseJson.y);
             }
             catch (Exception e)
             {

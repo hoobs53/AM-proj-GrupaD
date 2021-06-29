@@ -129,11 +129,11 @@ namespace MultiWPFApp.ViewModel
         private async void UpdatePlot()
         {
 
-            string responseText = await server.POSTwithClient();
+            string responseText = await server.POSTwithClient("rpy");
 
             try
             {
-                ChartData responseJson = JsonConvert.DeserializeObject<ChartData>(responseText);
+                RPYData responseJson = JsonConvert.DeserializeObject<RPYData>(responseText);
                 UpdatePlot(timeStamp / 1000.0, responseJson.Roll, responseJson.Pitch, responseJson.Yaw);
             }
             catch (Exception e)

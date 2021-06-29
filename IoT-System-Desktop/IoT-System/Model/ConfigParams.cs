@@ -8,10 +8,10 @@ namespace MultiWPFApp.Model
     public class ConfigParams
     {
         private ConfigData configData;
-        static readonly string urlDefault = "192.168.1.104";
+        public readonly string urlDefault = "192.168.1.101";
         public string Url;
 
-        static readonly int sampleTimeDefault = 500;
+        public readonly int sampleTimeDefault = 500;
         public int SampleTime;
 
         public readonly int maxSampleDefault = 100;

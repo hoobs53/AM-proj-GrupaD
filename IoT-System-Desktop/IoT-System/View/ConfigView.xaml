@@ -28,7 +28,14 @@
 
         <TextBlock Grid.Row="3" Text="IP Address" VerticalAlignment="Center" FontSize="20" Margin="29,20,-29,10" Height="40" />
         <TextBox Text="{Binding Url}" VerticalAlignment="Center" Grid.Row="3" TextAlignment="Center" HorizontalAlignment="Right" Margin="0,22,72,10" Height="38" Width="120"/>
-
-        <Button Grid.Row="4" Command="{Binding SetParams}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="100" >SAVE</Button>
+        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="4" Grid.Column="0" Command="{Binding SetParams}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="100" >SAVE</Button>
+            <Button Grid.Row="4" Grid.Column="1" Command="{Binding LoadDefault}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="55" Width="100" >DEFAULT</Button>
+        </Grid>
+        
     </Grid>
 </UserControl>
