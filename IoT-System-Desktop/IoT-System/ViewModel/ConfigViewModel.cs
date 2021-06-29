@@ -61,6 +61,8 @@ namespace MultiWPFApp.ViewModel
 
         public ButtonCommand SetParams { get; set; }
 
+        public ButtonCommand LoadDefault { get; set; }
+
         public ConfigViewModel()
         {
             config = new ConfigParams();
@@ -68,6 +70,7 @@ namespace MultiWPFApp.ViewModel
             SampleTime = config.SampleTime.ToString();
             Url = config.Url;
             SetParams = new ButtonCommand(SaveParams);
+            LoadDefault = new ButtonCommand(DefaultParams);
         }
         // Saving parameters to JSON file
         private void SaveParams()
@@ -76,6 +79,19 @@ namespace MultiWPFApp.ViewModel
             data.Add("sample_time", SampleTime);
             data.Add("sample_amount", maxSamples.ToString());  
             data.Add("url", Url);
+            string json = JsonConvert.SerializeObject(data);
+            File.WriteAllText("config.json", json);
+        }
+
+        private void DefaultParams()
+        {
+            var data = new Dictionary<string, string>();
+            MaxSamples = config.maxSampleDefault;
+            SampleTime = config.sampleTimeDefault.ToString();
+            Url = config.urlDefault;
+            data.Add("sample_time", SampleTime.ToString());
+            data.Add("sample_amount", MaxSamples.ToString());
+            data.Add("url", Url.ToString());
             string json = JsonConvert.SerializeObject(data);
             File.WriteAllText("config.json", json);
         }

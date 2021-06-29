@@ -99,15 +99,15 @@ namespace MultiWPFApp.ViewModel
         }
 
         // Update plot with new data points
-        private void UpdatePlot(double t, double r, double p, double y)
+        private void UpdatePlot(double t, double press, double hum, double temp)
         {
             LineSeries pressureLineSeries = DataPlotModel.Series[0] as LineSeries;
             LineSeries humidityLineSeries = DataPlotModel.Series[1] as LineSeries;
             LineSeries temperatureLineSeries = DataPlotModel.Series[2] as LineSeries;
 
-            pressureLineSeries.Points.Add(new DataPoint(t, r));
-            humidityLineSeries.Points.Add(new DataPoint(t, p));
-            temperatureLineSeries.Points.Add(new DataPoint(t, y));
+            pressureLineSeries.Points.Add(new DataPoint(t, press));
+            humidityLineSeries.Points.Add(new DataPoint(t, hum));
+            temperatureLineSeries.Points.Add(new DataPoint(t, temp));
 
             if (pressureLineSeries.Points.Count > config.maxSampleDefault)
             {
@@ -130,12 +130,12 @@ namespace MultiWPFApp.ViewModel
         private async void UpdatePlot()
         {
 
-            string responseText = await server.POSTwithClient();
+            string responseText = await server.POSTwithClient("pht");
 
             try
             {
-                ChartData responseJson = JsonConvert.DeserializeObject<ChartData>(responseText);
-                UpdatePlot(timeStamp / 1000.0, responseJson.Roll, responseJson.Pitch, responseJson.Yaw);
+                PHTData responseJson = JsonConvert.DeserializeObject<PHTData>(responseText);
+                UpdatePlot(timeStamp / 1000.0, responseJson.pressure, responseJson.humidity, responseJson.temperature);
             }
             catch (Exception e)
             {

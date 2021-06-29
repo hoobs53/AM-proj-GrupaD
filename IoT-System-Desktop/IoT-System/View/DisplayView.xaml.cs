@@ -33,7 +33,7 @@ namespace MultiWPFApp.View
             viewmodel = (DataContext as DisplayViewModel);
             if(viewmodel != null)
             {
-                viewmodel.CodeBehindHandler = ChangeColor;
+                viewmodel.setColorHandler = SetButtonColor;
                 if(!created)
                 initButtons();
             }
@@ -41,6 +41,11 @@ namespace MultiWPFApp.View
         private void ChangeColor(object param)
         {
             (ButtonMatrixGrid.FindName(param.ToString()) as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
+        }
+
+        private void SetButtonColor(string name, Color color)
+        {
+            (ButtonMatrixGrid.FindName(name) as Button).Background = new SolidColorBrush(color);
         }
         private void initButtons()
         {
