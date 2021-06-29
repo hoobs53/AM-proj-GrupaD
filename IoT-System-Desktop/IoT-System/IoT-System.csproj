@@ -99,6 +99,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\JoystickData.cs" />
     <Compile Include="Model\LedDisplay.cs" />
+    <Compile Include="Model\MeasurementModel2.cs" />
     <Compile Include="Model\PHTData.cs" />
     <Compile Include="Model\PixelsData.cs" />
     <Compile Include="Model\RPYData.cs" />
