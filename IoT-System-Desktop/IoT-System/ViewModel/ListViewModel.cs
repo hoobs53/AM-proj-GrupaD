@@ -36,18 +36,18 @@ namespace MultiWPFApp.ViewModel
         {
             // Read data from server in JSON array format
             string response = ServerMock.POSTgetMeasurements();
-            MeasurementModel2 measurementObj = JsonConvert.DeserializeObject<MeasurementModel2>(response);
+            MeasurementModel measurementObj = JsonConvert.DeserializeObject<MeasurementModel>(response);
             JArray measurementsJsonArray = measurementObj.measurements;
             // Convert generic JSON array container to list of specific type
-            var measurementsList = measurementsJsonArray.ToObject<List<MeasurementModel>>();
+            var measurementsList = measurementsJsonArray.ToObject<List<MeasurementListModel>>();
 
             JArray orientationJsonArray = measurementObj.orientation;
 
-            var orientationList = orientationJsonArray.ToObject<List<MeasurementModel>>();
+            var orientationList = orientationJsonArray.ToObject<List<MeasurementListModel>>();
 
             JArray joystickJsonArray = measurementObj.joystick;
 
-            var joystickList = joystickJsonArray.ToObject<List<MeasurementModel>>();
+            var joystickList = joystickJsonArray.ToObject<List<MeasurementListModel>>();
 
             // Add new elements to measurement collection
             if (Measurements.Count < measurementsList.Count)

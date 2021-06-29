@@ -99,13 +99,13 @@
     </ApplicationDefinition>
     <Compile Include="Model\JoystickData.cs" />
     <Compile Include="Model\LedDisplay.cs" />
-    <Compile Include="Model\MeasurementModel2.cs" />
+    <Compile Include="Model\MeasurementModel.cs" />
     <Compile Include="Model\PHTData.cs" />
     <Compile Include="Model\PixelsData.cs" />
     <Compile Include="Model\RPYData.cs" />
     <Compile Include="Model\ConfigData.cs" />
     <Compile Include="Model\ConfigParams.cs" />
-    <Compile Include="Model\MeasurementModel.cs" />
+    <Compile Include="Model\MeasurementListModel.cs" />
     <Compile Include="Model\ServerIoT.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ButtonCommand.cs" />
