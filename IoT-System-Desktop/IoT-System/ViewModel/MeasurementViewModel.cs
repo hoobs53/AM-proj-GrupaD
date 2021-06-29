@@ -59,12 +59,12 @@ namespace MultiWPFApp.ViewModel
             }
         }
 
-        public MeasurementViewModel(MeasurementModel model)
+        public MeasurementViewModel(MeasurementListModel model)
         {
             UpdateWithModel(model);
         }
 
-        public void UpdateWithModel(MeasurementModel model)
+        public void UpdateWithModel(MeasurementListModel model)
         {
             _name = model.Name;
             OnPropertyChanged("Name");
