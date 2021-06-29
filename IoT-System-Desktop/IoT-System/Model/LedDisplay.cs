@@ -11,10 +11,12 @@ namespace MultiWPFApp.Model
     {
         public readonly int SizeX = 8;
         public readonly int SizeY = 8;
+        public string status = "";
+        public int[][] pixels;
 
         public byte ActiveColorA    //!< Active color Alpha components
         {
-            get => (byte)((_activeColorR + _activeColorG + _activeColorB) / 3);
+            get => 255;
         }
 
         private byte _activeColorR;
@@ -42,21 +44,34 @@ namespace MultiWPFApp.Model
 
         public readonly Color OffColor;   //!< 'LED-is-off' color in Int ARGB format
 
-        private UInt16?[,,] model;
+        public UInt16?[,,] model;
         private UInt16?[,,] currentModel;
 
         /**
          * @brief Default constructor
          */
-        public LedDisplay(int offColor)
+        public LedDisplay(int [][]pixelsState)
         {
             model = new UInt16?[SizeX, SizeY, 3];
             currentModel = new UInt16?[SizeX, SizeY, 3];
-            OffColor = Color.FromArgb((byte)(offColor >> 24), (byte)(offColor >> 16), (byte)(offColor >> 8), (byte)offColor);
+            OffColor = Color.FromArgb(255, 0, 0, 0);
             _activeColorR = OffColor.R;
             _activeColorG = OffColor.G;
             _activeColorB = OffColor.B;
-            ClearModel();
+
+            int cnt = 0;
+            for (int i = 0; i < SizeX; i++)
+            {
+                for (int j = 0; j < SizeY; j++)
+                {
+
+                    model[i, j, 0] = (byte)pixelsState[cnt][0];
+                    model[i, j, 1] = (byte)pixelsState[cnt][1];
+                    model[i, j, 2] = (byte)pixelsState[cnt][2];
+                }
+            }
+            pixels = pixelsState;
+            initDisplay();
         }
 
         /**
@@ -110,7 +125,17 @@ namespace MultiWPFApp.Model
 
         public void checkIfChanged()
         {
-
+            status = "";
+            for (int i = 0; i < SizeX; i++)
+            {
+                for (int j = 0; j < SizeY; j++)
+                {
+                    if (model[i, j, 0] != currentModel[i, j, 0] || model[i, j, 1] != currentModel[i, j, 1] || model[i, j, 2] != currentModel[i, j, 2])
+                    {
+                        status = "UNSAVED CHANGES*";
+                    }
+                }
+            }
         }
         /**
          * @brief LED display data model clear - fill with all components with Null
@@ -132,7 +157,23 @@ namespace MultiWPFApp.Model
                 }
             }
         }
+        public void initDisplay()
+        {
+            ushort? r, g, b;
+            for (int i = 0; i < SizeX; i++)
+            {
+                for (int j = 0; j < SizeY; j++)
+                {
 
+                    r = model[i, j, 0];
+                    g = model[i, j, 1];
+                    b = model[i, j, 2];
+                    currentModel[i, j, 0] = r;
+                    currentModel[i, j, 1] = g;
+                    currentModel[i, j, 2] = b;
+                }
+            }
+        }
         /**
          * @brief Generate HTTP POST request parameters for LED display control via IoT server script
          * @return HTTP POST request parameters as Key-Value pairs

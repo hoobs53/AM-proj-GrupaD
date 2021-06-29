@@ -100,6 +100,7 @@
     <Compile Include="Model\JoystickData.cs" />
     <Compile Include="Model\LedDisplay.cs" />
     <Compile Include="Model\PHTData.cs" />
+    <Compile Include="Model\PixelsData.cs" />
     <Compile Include="Model\RPYData.cs" />
     <Compile Include="Model\ConfigData.cs" />
     <Compile Include="Model\ConfigParams.cs" />

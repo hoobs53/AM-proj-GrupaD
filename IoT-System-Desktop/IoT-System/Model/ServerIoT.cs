@@ -93,7 +93,6 @@ namespace MultiWPFApp.Model
 
             return responseText;
         }
-
         private string GetFileUrl(string file)
         {
             return "http://" + ip + "/" + file + ".json";
@@ -105,7 +104,7 @@ namespace MultiWPFApp.Model
         }
         private string GetPixelsUrl()
         {
-            return "http://" + ip + "/cgi-bin/get_pixels.py";
+            return "http://" + ip + "/cgi-bin/get_pixels2.py";
         }
         //public async Task<string> GETwithClient()
         //{

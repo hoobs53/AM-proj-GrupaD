@@ -21,6 +21,7 @@ namespace MultiWPFApp.View
     /// </summary>
     public partial class DisplayView : UserControl
     {
+        private string responseText;
         private bool created = false;
         private DisplayViewModel viewmodel;
         public DisplayView()
@@ -31,16 +32,12 @@ namespace MultiWPFApp.View
         private void DataContextChangedHandler(object sender, DependencyPropertyChangedEventArgs e)
         {
             viewmodel = (DataContext as DisplayViewModel);
-            if(viewmodel != null)
+            if (viewmodel != null)
             {
                 viewmodel.setColorHandler = SetButtonColor;
-                if(!created)
-                initButtons();
+                if (!created)
+                    initButtons();
             }
-        }
-        private void ChangeColor(object param)
-        {
-            (ButtonMatrixGrid.FindName(param.ToString()) as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
         }
 
         private void SetButtonColor(string name, Color color)
@@ -61,22 +58,28 @@ namespace MultiWPFApp.View
                 ButtonMatrixGrid.RowDefinitions.Add(new RowDefinition());
                 ButtonMatrixGrid.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
             }
-
+            int[][] pixelsState = viewmodel.ledDisplay.pixels;
+            byte r, g, b;
+            int cnt = 0;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
+                    r = (byte)pixelsState[cnt][0];
+                    g = (byte)pixelsState[cnt][1];
+                    b = (byte)pixelsState[cnt][2];
                     // <Button
                     Button led = new Button()
                     {
                         // Name = "LEDij"
-                        Name = "LED" + j.ToString() + i.ToString(),
+                        Name = "LED" + i.ToString() + j.ToString(),
                         // CommandParameter = "LEDij"
-                        CommandParameter = "LED" + j.ToString() + i.ToString(),
+                        CommandParameter = "LED" + i.ToString() + j.ToString(),
                         // Style="{StaticResource LedButtonStyle}"
                         Style = (Style)FindResource("LedButtonStyle"),
                         // Bacground="{StaticResource ... }"
-                        Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)),
+
+                        Background = new SolidColorBrush(Color.FromArgb(255, r, g, b)),
                         // BorderThicness="2"
                         BorderThickness = new Thickness(2),
                     };
@@ -87,11 +90,12 @@ namespace MultiWPFApp.View
                     // Grid.Row="j"
                     Grid.SetRow(led, j);
                     // />
-
+                    cnt++;
                     ButtonMatrixGrid.Children.Add(led);
                     ButtonMatrixGrid.RegisterName(led.Name, led);
                 }
             }
+
             created = true;
         }
     }

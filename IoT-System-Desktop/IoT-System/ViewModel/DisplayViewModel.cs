@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
-
+using System.Diagnostics;
+using Newtonsoft.Json;
 namespace MultiWPFApp.ViewModel
 {
     using Model;
@@ -10,13 +13,14 @@ namespace MultiWPFApp.ViewModel
 
         public SolidColorBrush[,] model = new SolidColorBrush[8, 8];
 
+        private PixelsData pixels;
         public ButtonCommandWithParameter CommonButtonCommand { get; set; }
 
         public Action<string, Color> setColorHandler;
 
-        private LedDisplay ledDisplay;  //!< LED display model
+        public LedDisplay ledDisplay;  //!< LED display model
         private ServerIoT server;       //!< IoT server model
-        private ConfigData config;
+        private ConfigParams config;
 
         public int DisplaySizeX { get => ledDisplay.SizeX; }
         public int DisplaySizeY { get => ledDisplay.SizeY; }
@@ -82,6 +86,23 @@ namespace MultiWPFApp.ViewModel
             }
         }
 
+        private string status;
+        public string Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                if(status != value)
+                {
+                    status = value;
+                    OnPropertyChanged("Status");
+                }
+            }
+        }
+
         private SolidColorBrush _selectedColor;
         public SolidColorBrush SelectedColor
         {
@@ -102,14 +123,15 @@ namespace MultiWPFApp.ViewModel
 
         public DisplayViewModel()
         {
-            ledDisplay = new LedDisplay(0x00000000);
+            config = new ConfigParams();
+            server = new ServerIoT(config.Url);
+            pixels = JsonConvert.DeserializeObject<PixelsData>(server.POSTgetPixels());
+            ledDisplay = new LedDisplay(pixels.response);
             SelectedColor = new SolidColorBrush(ledDisplay.ActiveColor);
             CommonButtonCommand = new ButtonCommandWithParameter(SetButtonColor);
             SendRequestCommand = new ButtonCommand(SendControlRequest);
             SendClearCommand = new ButtonCommand(ClearDisplay);
-            config = new ConfigData();
-
-            server = new ServerIoT(config.url);
+            
         }
 
         /**
@@ -145,6 +167,7 @@ namespace MultiWPFApp.ViewModel
             (int x, int y) = LedTagToIndex(parameter);
             // Update LED display data model
             ledDisplay.UpdateModel(x, y);
+            Status = ledDisplay.status;
         }
 
         /**
@@ -170,6 +193,7 @@ namespace MultiWPFApp.ViewModel
         private async void SendControlRequest()
         {
             await server.PostControlRequest(ledDisplay.getControlPostData());
+            Status = "";
         }
     }
 }
