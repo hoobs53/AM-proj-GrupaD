@@ -21,7 +21,6 @@ namespace MultiWPFApp.View
     /// </summary>
     public partial class DisplayView : UserControl
     {
-        private string responseText;
         private bool created = false;
         private DisplayViewModel viewmodel;
         public DisplayView()
@@ -61,9 +60,9 @@ namespace MultiWPFApp.View
             int[][] pixelsState = viewmodel.ledDisplay.pixels;
             byte r, g, b;
             int cnt = 0;
-            for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int i = 0; i < 8; i++)
                 {
                     r = (byte)pixelsState[cnt][0];
                     g = (byte)pixelsState[cnt][1];
