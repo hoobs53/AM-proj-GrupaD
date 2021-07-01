@@ -1,0 +1,18 @@
+.save_btn {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.input {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}

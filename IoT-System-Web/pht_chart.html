@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Raspberry Pi Data Grabber</title>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<script type="text/javascript" src="js/datagrabber_pht.js"></script> 
+	<link rel="stylesheet" type="text/css" href="styles/datagrabber_example_css.css">
+</head>
+<body>
+	<h1 class="text-center">Measurements Data</h1>
+	<div id="datagrabber" class="container border border-primary rounded datagrabber">
+		<div class="chartcontainer">
+			<canvas id="chart"></canvas>
+		</div>
+				<ul class="navigation">
+				<div class="border border-primary rounded menuitem"><span>IP address: <span id="ipadress"></span> </span></div>
+				<div class="border border-primary rounded menuitem"><span>Sample time: <span id="sampletime"></span> ms</span></div>
+				<button id="success" type="button" class="btn btn-success">Start</button>
+				<button id="danger" type="button" class="btn btn-danger">Stop</button>
+		</ul>
+	</div>
+</body>
+</html>
