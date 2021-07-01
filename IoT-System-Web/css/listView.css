@@ -8,6 +8,11 @@
 	margin-bottom: 5px;
 }
 
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;

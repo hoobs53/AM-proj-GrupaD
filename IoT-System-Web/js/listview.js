@@ -1,17 +1,24 @@
+var ip = "192.168.0.103";
+var url = "http://" + ip + "/get_measurements.php";
+
 function createRow(table_id, id) {
   var table = document.getElementById(table_id);
-  var row = table.insertRow(-1);
-  var cellName = row.insertCell(0);
-  var cellData = row.insertCell(1);
-  var cellUnit = row.insertCell(2);
-  cellName.innerHTML = id[0];
-  cellData.innerHTML = id[1];
-  cellUnit.innerHTML = id[2];
+  for (var i in id) {
+	  var row = table.insertRow(-1);
+		var cellName = row.insertCell(0);
+		var cellData = row.insertCell(1);
+		var cellUnit = row.insertCell(2);
+		cellName.innerHTML = id[i]["name"];
+		cellData.innerHTML = id[i]["value"];
+		cellUnit.innerHTML = id[i]["unit"];
+	  }
 }
 
 function deleteRow(table_id) {
-	while ($('#m_table tr').length > 1) {
-		document.getElementById("m_table").deleteRow(-1);
+	var table = document.getElementById(table_id);
+	var rowCount = document.getElementById(table_id).rows.length;
+	for (var i = 0; i < rowCount - 1; i++) {
+		table.deleteRow(-1);
 	}
 }
 
@@ -21,33 +28,39 @@ function emptyCheck(value) {
 }
 
 function refresh() {
-	$.ajax("http://192.168.1.101/config.json", {
+	$.ajax(url, {
 		type: 'GET', dataType: 'json',
 		success: function(responseJSON) {
-			var measurement = responseJSON["measurement"];
+			var measurement = responseJSON["measurements"];
 			var orientation = responseJSON["orientation"];
 			var joystick = responseJSON["joystick"];
+						
+				deleteRow("m_table");
+				deleteRow("o_table");
+				deleteRow("j_table");
+				
+				createRow("m_table", measurement);
+				createRow("o_table", orientation);
+				createRow("j_table", joystick);
+				
+				if(emptyCheck(joystick)) {
+				console.log("nie ziala");
+				}
+		},
+		error: function(cokolwiek) {
+		console.log(cokolwiek);
 		}
 	});
-	
-	deleteRow("m_table");
-	deleteRow("o_table");
-	deleteRow("y_table");
-	
-	if(emptyCheck("m_table"){ createRow("m_table", measurement); }
-	if(emptyCheck("o_table"){ createRow("o_table", orientation); }
-	if(emptyCheck("y_table"){ createRow("y_table", joystick); }
 }
+
+
 function test() {
 	while ($('#m_table tr').length > 1) {
-		
-//	if(document.getElementById("m_table").rows.length >0){
-		deleteRow("m_table");
+		deleteRow();
 	}
 }
 
-
-
 $(document).ready(() => {
-	$("#refresh").click(test);
+	console.log(url);
+	$("#refresh").click(refresh);
 });
