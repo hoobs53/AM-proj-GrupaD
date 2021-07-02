@@ -13,16 +13,9 @@
         <Button
             android:id="@+id/startBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="start"
-            android:text="start" />
-
-        <Button
-            android:id="@+id/stopBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="stop"
-            android:text="stop" />
+            android:layout_height="63dp"
+            android:onClick="Refresh"
+            android:text="Refresh" />
 
         <TextView
             android:id="@+id/textView4"

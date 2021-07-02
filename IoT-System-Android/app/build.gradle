@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.lab_am.lab_06"
+        applicationId "IoS.System.Android"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
