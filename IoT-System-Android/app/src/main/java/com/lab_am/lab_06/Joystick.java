@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,20 +28,22 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Graph extends AppCompatActivity {
+public class Joystick extends AppCompatActivity {
 
     private String ipAddress;
     private String url;
 
     private GraphView dataGraph;
-    private LineGraphSeries<DataPoint> dataSeries;
-    private LineGraphSeries<DataPoint> dataSeries2;
-    private LineGraphSeries<DataPoint> dataSeries3;
+    private PointsGraphSeries<DataPoint> dataSeries;
+
     private final int dataGraphMaxDataPointsNumber = 1000;
-    private final double dataGraphMaxX = 10.0d;
-    private final double dataGraphMinX =  0.0d;
-    private final double dataGraphMaxY =  360.0d;
-    private final double dataGraphMinY =  0.0d;
+    private final double dataGraphMaxX = 25.0d;
+    private final double dataGraphMinX =  -25.0d;
+    private final double dataGraphMaxY =  25.0d;
+    private final double dataGraphMinY =  -25.0d;
+
+    double temp_x = 0;
+    double temp_y = 0;
 
     private RequestQueue queue;
     private Timer requestTimer;
@@ -52,21 +55,20 @@ public class Graph extends AppCompatActivity {
     private final Handler handler = new Handler();
     private int sampleTime;
 
+    TextView counterView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph);
+        setContentView(R.layout.activity_joystick);
+        counterView = (TextView)findViewById(R.id.counter);
+        counterView.setText("Counter: 0");
 
         ipAddress = Settings.CONFIG_IP_ADDRESS;
 
 
-        dataGraph = (GraphView)findViewById(R.id.dataGraph);
-        dataSeries = new LineGraphSeries<>(new DataPoint[]{});
-        dataSeries2 = new LineGraphSeries<>(new DataPoint[]{});
-        dataSeries3 = new LineGraphSeries<>(new DataPoint[]{});
-        dataGraph.addSeries(dataSeries);
-        dataGraph.addSeries(dataSeries2);
-        dataGraph.addSeries(dataSeries3);
+        dataGraph = (GraphView)findViewById(R.id.dataGraphjoystick);
+
         dataGraph.getViewport().setXAxisBoundsManual(true);
         dataGraph.getViewport().setMinX(dataGraphMinX);
         dataGraph.getViewport().setMaxX(dataGraphMaxX);
@@ -74,31 +76,25 @@ public class Graph extends AppCompatActivity {
         dataGraph.getViewport().setMinY(dataGraphMinY);
         dataGraph.getViewport().setMaxY(dataGraphMaxY);
         dataGraph.getViewport().setDrawBorder(true);
-
-
-
-        dataGraph.setTitle("Orientation data");
-        GridLabelRenderer gridLabel = dataGraph.getGridLabelRenderer();
-        gridLabel.setHorizontalAxisTitle("Time [sec]");
-        gridLabel.setVerticalAxisTitle("Orientation [deg]");
-        gridLabel.setPadding(48);
-        gridLabel.setHumanRounding(false);
-        gridLabel.setNumHorizontalLabels(6);
-        gridLabel.setNumVerticalLabels(10);
-
-        dataSeries.setTitle("Roll");
+        dataSeries = new PointsGraphSeries<>(new DataPoint[]{});
         dataSeries.setColor(Color.RED);
-        dataSeries2.setColor(Color.BLUE);
-        dataSeries3.setColor(Color.GREEN);
-        dataSeries2.setTitle("Pitch");
-        dataSeries3.setTitle("Yaw");
-        dataGraph.getLegendRenderer().setVisible(true);
+        dataGraph.addSeries(dataSeries);
 
-        queue = Volley.newRequestQueue(Graph.this);
+
+        dataGraph.setTitle("Joystick position data");
+        GridLabelRenderer gridLabel = dataGraph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("Coordinate x [-]");
+        gridLabel.setVerticalAxisTitle("Coordinate [-]");
+        gridLabel.setHumanRounding(false);
+        gridLabel.setNumHorizontalLabels(11);
+        gridLabel.setNumVerticalLabels(11);
+        gridLabel.setPadding(48);
+
+        queue = Volley.newRequestQueue(Joystick.this);
     }
 
     public void startBtn(View view) {
-       // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
+        // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
         sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
         if (requestTimer == null) {
             requestTimer = new Timer();
@@ -106,7 +102,7 @@ public class Graph extends AppCompatActivity {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            sendRequestv2("rpy");
+                            sendRequestv2("joystick");
                         }
                     });
                 }
@@ -151,6 +147,11 @@ public class Graph extends AppCompatActivity {
         return (currentTime - requestTimerPreviousTime);
     }
 
+    private void createNewDataseries(){
+        dataSeries = new PointsGraphSeries<>(new DataPoint[]{});
+        dataSeries.setColor(Color.RED);
+        dataSeries.setSize(15);
+    }
 
     private void sendRequestv2(String file) {
         url = Settings.geturlscript(ipAddress);
@@ -191,13 +192,24 @@ public class Graph extends AppCompatActivity {
             // get data from JSON response
             double [] data = getData(response);
 
-
-            // update plot series
             double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
-            boolean scrollGraph = (timeStamp > dataGraphMaxX);
-            dataSeries.appendData(new DataPoint(timeStamp, data[0]), scrollGraph, dataGraphMaxDataPointsNumber);
-            dataSeries2.appendData(new DataPoint(timeStamp, data[1]), scrollGraph, dataGraphMaxDataPointsNumber);
-            dataSeries3.appendData(new DataPoint(timeStamp, data[2]), scrollGraph, dataGraphMaxDataPointsNumber);
+            boolean scrollGraph = false;
+
+            if(temp_x != data[0] || temp_y!=data[1]){
+                dataGraph.removeAllSeries();
+                temp_x = data[0];
+                temp_y = data[1];
+                createNewDataseries();
+                dataGraph.addSeries(dataSeries);
+                dataSeries.appendData(new DataPoint(data[0], data[1]),scrollGraph,dataGraphMaxDataPointsNumber);
+            }
+            else
+            {
+                dataSeries.appendData(new DataPoint(data[0], data[1]),scrollGraph,dataGraphMaxDataPointsNumber);
+            }
+            counterView.setText("Counter: " + (int)data[2]);
+            // update plot series
+
 
             // refresh chart
             dataGraph.onDataChanged(true, true);
@@ -208,26 +220,26 @@ public class Graph extends AppCompatActivity {
     }
     private double [] getData(String response){
         JSONObject object;
-        double r = Double.NaN;
-        double p = Double.NaN;
+        double x = Double.NaN;
         double y = Double.NaN;
+        double mid = Double.NaN;
         double [] result = new double[3];
         try{
             object = new JSONObject(response);
         }catch(Exception e){
-            result[0] = r;
-            result[1] = p;
-            result[2] = y;
+            result[0] = x;
+            result[1] = y;
+            result[2] = mid;
             return result;
         }
 
         try{
-            r = object.getDouble("roll");
-            p = object.getDouble("pitch");
-            y = object.getDouble("yaw");
-            result[0] = r;
-            result[1] = p;
-            result[2] = y;
+            x = object.getDouble("x");
+            y = object.getDouble("y");
+            mid = object.getDouble("mid_counter");
+            result[0] = x;
+            result[1] = y;
+            result[2] = mid;
         } catch (JSONException e){
             // TODO: handle error
         }

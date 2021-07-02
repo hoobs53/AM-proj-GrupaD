@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case R.id.jc: {
-               // openGraphPHTchart();
+                openJoystick();
                 break;
             }
             default: {
@@ -104,6 +104,14 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(openListIntent, Settings.REQUEST_CODE_CONFIG);
     }
 
+    private void openJoystick() {
+        Intent openJoystickIntent = new Intent(this, Joystick.class);
+        Bundle configBundle = new Bundle();
+        configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        openJoystickIntent.putExtras(configBundle);
+        startActivityForResult(openJoystickIntent, Settings.REQUEST_CODE_CONFIG);
+    }
 }
 
 
