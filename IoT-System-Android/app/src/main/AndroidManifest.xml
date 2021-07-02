@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab_06"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MeasurementList"></activity>
+        <activity android:name=".Joystick"></activity>
+        <activity android:name=".MeasurementList" />
         <activity android:name=".Graphpht" />
         <activity android:name=".Led" />
         <activity android:name=".Graph" />

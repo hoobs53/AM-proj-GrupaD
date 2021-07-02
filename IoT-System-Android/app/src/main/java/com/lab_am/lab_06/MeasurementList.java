@@ -34,8 +34,8 @@ public class MeasurementList extends AppCompatActivity {
     private RecyclerView recyclerView2;
     private RecyclerView recyclerView3;
 
+
     private String ipAddress;
-    private String url;
     private int sampleTime;
 
 
