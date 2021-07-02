@@ -14,8 +14,8 @@ var chart;         ///< Chart.js object
 
 var timer; ///< request timer
 
-var resource_url = "http://192.168.0.101/resource.php"; ///< server app with RPY orientation in JSON format
-var get_conf_url = "http://192.168.0.101/get_config.php"; ///< server app with configuration in JSON format
+var resource_url = "http://192.168.0.103/resource.php"; ///< server app with RPY orientation in JSON format
+var get_conf_url = "http://192.168.0.103/get_config.php"; ///< server app with configuration in JSON format
 
 function addData(y){
 	if(ydataP.length > maxSamplesNumber)
@@ -47,23 +47,11 @@ function stopTimer(){
 
 function ajaxJSON() {
 	$.ajax(resource_url, {
-		type: 'GET', dataType: 'json',
+		type: 'POST', dataType: 'json', data: {"filename":"pht"},
 		success: function(responseJSON, status, xhr) {
 			addData(responseJSON);
 		}
 	});
-}
-
-function loadConf(data){
-	sampleTimeMsec = data["sample"];  ///< sample time in msec
-	sampleTimeSec = sampleTimeMsec/1000;
-	maxSamplesNumber = data["sample_amount"];       ///< maximum number of samples
-	ipAddress = data["ip"];   ///< ip address
-	$("#ipaddress").text(ipAddress);
-	$("#sampletime").text(sampleTimeMsec);
-	$("#samplenumber").text(maxSamplesNumber);
-	
-	setUrl(ipAddress);
 }
 
 function setUrl(ipAddress) {
@@ -71,17 +59,32 @@ function setUrl(ipAddress) {
 	get_conf_url = "http://" + ipAddress + "/get_config.php";
 }
 
+function loadConf(data){
+	sampleTimeMsec = data["sample_time"];  ///< sample time in msec
+	sampleTimeSec = sampleTimeMsec/1000;
+	maxSamplesNumber = parseInt(data["sample_amount"]);       ///< maximum number of samples
+	ipAddress = data["ip"];   ///< ip address
+	chartInit();
+	setUrl(ipAddress);
+}
+
+function configInit(){
+		$.ajax(get_conf_url, {
+		type: 'GET', dataType: 'json',
+		success: function(responseJSON){
+			loadConf(responseJSON);
+		},
+		error: function(cos) {
+			console.log(cos);
+		}
+	})
+}
+
 /**
 * @brief Chart initialization
 */
 function chartInit()
 {
-	$.ajax(get_conf_url, {
-		type: 'GET', dataType: 'json',
-		success: function(responseJSON){
-			loadConf(responseJSON);
-		}
-	})
 	// array with consecutive integers: <0, maxSamplesNumber-1>
 	xdata = [...Array(maxSamplesNumber).keys()]; 
 	// scaling all values ​​times the sample time 
@@ -108,6 +111,7 @@ function chartInit()
 			datasets: [{
 				fill: false,
 				label: 'Pressure',
+				yAxisID: 'A',
 				backgroundColor: 'rgb(255, 0, 0)',
 				borderColor: 'rgb(255, 0, 0)',
 				data: ydataP,
@@ -116,6 +120,7 @@ function chartInit()
 			{
 				fill: false,
 				label: 'Humidity',
+				yAxisID: 'B',
 				backgroundColor: 'rgb(0, 255, 0)',
 				borderColor: 'rgb(0, 255, 0)',
 				data: ydataH,
@@ -124,6 +129,7 @@ function chartInit()
 			{
 				fill: false,
 				label: 'Temperature',
+				yAxisID: 'B',
 				backgroundColor: 'rgb(0, 0, 255)',
 				borderColor: 'rgb(0, 0, 255)',
 				data: ydataT,
@@ -139,9 +145,18 @@ function chartInit()
 			animation: false,
 			scales: {
 				yAxes: [{
+					id: 'A',
+					position: 'left',
 					scaleLabel: {
 						display: true,
-						labelString: 'Measurements [hPA, %, *C]'
+						labelString: 'Measurements [hPA]'
+					}
+				},{
+					id: 'B',
+					position: 'left',
+					scaleLabel: {
+						display: true,
+						labelString: 'Measurements [%, *C]'
 					}
 				}],
 				xAxes: [{
@@ -163,7 +178,7 @@ function chartInit()
 }
 
 $(document).ready(() => { 
-	chartInit();
+	configInit();
 	$("#start").click(startTimer);
 	$("#stop").click(stopTimer);
 });

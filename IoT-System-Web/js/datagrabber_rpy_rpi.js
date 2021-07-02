@@ -13,8 +13,9 @@ var chart;         ///< Chart.js object
 
 var timer; ///< request timer
 
-const url = 'http://192.168.0.101/orientation.dat'; ///< server app with RPY orientation in JSON format
-const get_conf_url = 'http://192.168.0.101/get_config.php';
+const resource_url = 'http://192.168.0.103/resource.php'; ///< server app with RPY orientation in JSON format
+const get_conf_url = 'http://192.168.0.103/get_config.php';
+
 function addData(y){
 	if(ydataR.length > maxSamplesNumber)
 	{
@@ -44,20 +45,38 @@ function stopTimer(){
 }
 
 function ajaxJSON() {
-	$.ajax(url, {
-		type: 'GET', dataType: 'json',
+	$.ajax(resource_url, {
+		type: 'POST', dataType: 'json', data: {"filename":"rpy"},
 		success: function(responseJSON, status, xhr) {
 			addData(responseJSON);
 		}
 	});
 }
 
+function setUrl(ipAddress) {
+	resource_url = "http://" + ipAddress + "/resource.php";
+	get_conf_url = "http://" + ipAddress + "/get_config.php";
+}
+
 function loadConf(data){
 	sampleTimeMsec = data["sample_time"];  ///< sample time in msec
 	sampleTimeSec = sampleTimeMsec/1000;
-	maxSamplesNumber = data["sample_amount"];       ///< maximum number of samples
-	$("#sampletime").text(sampleTimeMsec);
-	$("#samplenumber").text(maxSamplesNumber);
+	maxSamplesNumber = parseInt(data["sample_amount"]);       ///< maximum number of samples
+	ipAddress = data["ip"];   ///< ip address
+	chartInit();
+	setUrl(ipAdress);
+}
+
+function configInit(){
+		$.ajax(get_conf_url, {
+		type: 'GET', dataType: 'json',
+		success: function(responseJSON){
+			loadConf(responseJSON);
+		},
+		error: function(cos) {
+			console.log(cos);
+		}
+	})
 }
 
 /**
@@ -65,12 +84,6 @@ function loadConf(data){
 */
 function chartInit()
 {
-	$.ajax(get_conf_url, {
-		type: 'GET', dataType: 'json',
-		success: function(responseJSON){
-			loadConf(responseJSON);
-		}
-	})
 	// array with consecutive integers: <0, maxSamplesNumber-1>
 	xdata = [...Array(maxSamplesNumber).keys()]; 
 	// scaling all values ​​times the sample time 
@@ -130,7 +143,7 @@ function chartInit()
 				yAxes: [{
 					scaleLabel: {
 						display: true,
-						labelString: 'Random value'
+						labelString: 'Orientation [deg]'
 					}
 				}],
 				xAxes: [{
@@ -152,7 +165,7 @@ function chartInit()
 }
 
 $(document).ready(() => { 
-	chartInit();
+	configInit();
 	$("#start").click(startTimer);
 	$("#stop").click(stopTimer);
 });

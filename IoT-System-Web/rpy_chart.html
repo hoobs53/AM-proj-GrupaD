@@ -10,17 +10,15 @@
 	<link rel="stylesheet" type="text/css" href="styles/datagrabber_example_css.css">
 </head>
 <body>
-	<h1 class="text-center">Raspberry Pi RPY Data Grabber</h1>
+	<h1 class="text-center">Orientation Data</h1>
 	<div id="datagrabber" class="container border border-primary rounded datagrabber">
-		<ul class="navigation">
-				<li><button id="start" type="button" class="btn btn-primary menuitem">Start</button></li>
-				<li><button id="stop" type="button" class="btn btn-primary menuitem">Stop</button></li>
-				<li><div class="border border-primary rounded menuitem"><span>Sample time: <span id="sampletime"></span> ms</span></div></li>  
-				<li><div class="border border-primary rounded menuitem"><span>Max. number of samples: <span id="samplenumber"></span></span></div></li>
-		</ul>
 		<div class="chartcontainer">
 			<canvas id="chart"></canvas>
 		</div>
+		<ul class="navigation">
+				<button id="start" type="button" class="btn btn-success">Start</button>
+				<button id="stop" type="button" class="btn btn-danger">Stop</button>
+		</ul>
 	</div>
 </body>
 </html>
