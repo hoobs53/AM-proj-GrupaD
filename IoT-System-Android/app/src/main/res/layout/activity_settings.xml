@@ -21,27 +21,27 @@
         app:layout_constraintVertical_bias="0.412">
 
         <TextView
-            android:id="@+id/textViewIPConfig"
+            android:id="@+id/textViewSampleAmountConfig"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="IP address:"
+            android:text="Sample amount"
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/ipEditTextConfig"
-            android:layout_width="fill_parent"
+            android:id="@+id/sampleAmountEditTextConfig"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:ems="10"
             android:importantForAutofill="no"
-            android:inputType="textUri"
-            android:text="192.168.0.10" />
+            android:inputType="numberDecimal"
+            android:text="100" />
 
         <TextView
             android:id="@+id/textViewSampleTimeConfig"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sample time (ms)"
+            android:text="Sample time"
             android:textSize="24sp" />
 
         <EditText
@@ -53,6 +53,24 @@
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
             android:text="500" />
+
+        <TextView
+            android:id="@+id/textViewIPConfig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IP address"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/ipEditTextConfig"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            android:text="192.168.1.24" />
+
     </LinearLayout>
 
     <TextView
@@ -76,8 +94,20 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintHorizontal_bias="0.098"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.407" />
+        app:layout_constraintVertical_bias="0.403" />
+
+    <Button
+        android:id="@+id/default_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DEFAULT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.898"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.403" />
 </androidx.constraintlayout.widget.ConstraintLayout>

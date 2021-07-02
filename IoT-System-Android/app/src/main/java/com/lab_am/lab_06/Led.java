@@ -42,6 +42,7 @@ public class Led extends AppCompatActivity {
     /* BEGIN widgets */
     SeekBar redSeekBar, greenSeekBar, blueSeekBar;
     TextView statusText;
+    View colorView;     ///< Color preview
 
     /* END widgets */
     /* BEGIN colors */
@@ -98,6 +99,7 @@ public class Led extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {/* Auto-generated method stub */ }
             public void onStopTrackingTouch(SeekBar seekBar) {
                 ledActiveColor = seekBarUpdate('R', progressChangedValue);
+                colorView.setBackgroundColor(ledActiveColor);
             }
         });
 
@@ -111,6 +113,7 @@ public class Led extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {/* Auto-generated method stub */ }
             public void onStopTrackingTouch(SeekBar seekBar) {
                 ledActiveColor = seekBarUpdate('G', progressChangedValue);
+                colorView.setBackgroundColor(ledActiveColor);
             }
         });
 
@@ -124,12 +127,14 @@ public class Led extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {/* Auto-generated method stub */ }
             public void onStopTrackingTouch(SeekBar seekBar) {
                 ledActiveColor = seekBarUpdate('B', progressChangedValue);
+                colorView.setBackgroundColor(ledActiveColor);
             }
         });
 
 
         statusText = findViewById(R.id.LEDStatus);
         statusText.setTextColor(argbToInt(100,255,0,0));
+        colorView = findViewById(R.id.colorView);
         /* END widgets initialization */
 
         /* BEGIN 'Volley' request queue initialization */
@@ -252,6 +257,7 @@ public class Led extends AppCompatActivity {
             default: /* Do nothing */ break;
         }
         ledActiveColorA = 100;
+        colorView.setBackgroundColor(ledActiveColor);
         return argbToInt(ledActiveColorA,  ledActiveColorR, ledActiveColorG, ledActiveColorB);
     }
 
@@ -262,6 +268,7 @@ public class Led extends AppCompatActivity {
     public void changeLedIndicatorColor(View v) {
         // Set active color as background
         v.setBackgroundColor(ledActiveColor);
+        colorView.setBackgroundColor(ledActiveColor);
         // Find element x-y position
         String tag = (String)v.getTag();
         Vector<Integer> index = ledTagToIndex(tag);

@@ -12,10 +12,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 public class MainActivity extends AppCompatActivity {
 
     private String ipAddress = Settings.CONFIG_IP_ADDRESS;
-    private int sampleTime = Settings.DEFAULT_SAMPLE_TIME;
+    private int sampleTime = Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
+    private int sampleAmount = Integer.parseInt(Settings.CONFIG_SAMPLE_AMOUNT);
+    private RequestQueue queue;
 
 
     @Override
@@ -23,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        queue = Volley.newRequestQueue(MainActivity.this);
+        Settings.loadConfig(queue);
     }
 
 
@@ -64,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_AMOUNT, sampleAmount);
         openConfigIntent.putExtras(configBundle);
         startActivityForResult(openConfigIntent, Settings.REQUEST_CODE_CONFIG);
     }
@@ -73,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_AMOUNT, sampleAmount);
         openGraphIntent.putExtras(configBundle);
         startActivity(openGraphIntent);
     }
@@ -82,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_AMOUNT, sampleAmount);
         openGraphIntent.putExtras(configBundle);
         startActivity(openGraphIntent);
     }
@@ -91,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_AMOUNT, sampleAmount);
         openLedIntent.putExtras(configBundle);
         startActivity(openLedIntent);
     }
@@ -100,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_AMOUNT, sampleAmount);
         openListIntent.putExtras(configBundle);
         startActivityForResult(openListIntent, Settings.REQUEST_CODE_CONFIG);
     }
@@ -109,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle configBundle = new Bundle();
         configBundle.putString(Settings.CONFIG_IP_ADDRESS, ipAddress);
         configBundle.putInt(Settings.CONFIG_SAMPLE_TIME, sampleTime);
+        configBundle.putInt(Settings.CONFIG_SAMPLE_AMOUNT, sampleAmount);
         openJoystickIntent.putExtras(configBundle);
         startActivityForResult(openJoystickIntent, Settings.REQUEST_CODE_CONFIG);
     }

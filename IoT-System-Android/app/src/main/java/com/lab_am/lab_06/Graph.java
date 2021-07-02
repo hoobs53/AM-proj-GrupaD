@@ -31,12 +31,13 @@ public class Graph extends AppCompatActivity {
 
     private String ipAddress;
     private String url;
+    private  int dataGraphMaxDataPointsNumber;
+    private int sampleTime;
 
     private GraphView dataGraph;
     private LineGraphSeries<DataPoint> dataSeries;
     private LineGraphSeries<DataPoint> dataSeries2;
     private LineGraphSeries<DataPoint> dataSeries3;
-    private final int dataGraphMaxDataPointsNumber = 1000;
     private final double dataGraphMaxX = 10.0d;
     private final double dataGraphMinX =  0.0d;
     private final double dataGraphMaxY =  360.0d;
@@ -50,7 +51,6 @@ public class Graph extends AppCompatActivity {
     private boolean requestTimerFirstRequestAfterStop;
     private TimerTask requestTimerTask;
     private final Handler handler = new Handler();
-    private int sampleTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +97,14 @@ public class Graph extends AppCompatActivity {
         queue = Volley.newRequestQueue(Graph.this);
     }
 
+    public void loadconfig(){
+        sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
+        dataGraphMaxDataPointsNumber = Integer.parseInt(Settings.CONFIG_SAMPLE_AMOUNT);
+    }
+
     public void startBtn(View view) {
        // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
-        sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
+        loadconfig();
         if (requestTimer == null) {
             requestTimer = new Timer();
             requestTimerTask = new TimerTask() {
@@ -153,7 +158,7 @@ public class Graph extends AppCompatActivity {
 
 
     private void sendRequestv2(String file) {
-        url = Settings.geturlscript(ipAddress);
+        url = Settings.geturlscript(ipAddress,Settings.FILE_NAME);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override

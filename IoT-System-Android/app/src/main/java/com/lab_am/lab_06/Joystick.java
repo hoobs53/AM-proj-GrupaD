@@ -32,11 +32,12 @@ public class Joystick extends AppCompatActivity {
 
     private String ipAddress;
     private String url;
+    private  int dataGraphMaxDataPointsNumber;
+    private int sampleTime;
 
     private GraphView dataGraph;
     private PointsGraphSeries<DataPoint> dataSeries;
 
-    private final int dataGraphMaxDataPointsNumber = 1000;
     private final double dataGraphMaxX = 25.0d;
     private final double dataGraphMinX =  -25.0d;
     private final double dataGraphMaxY =  25.0d;
@@ -53,7 +54,6 @@ public class Joystick extends AppCompatActivity {
     private boolean requestTimerFirstRequestAfterStop;
     private TimerTask requestTimerTask;
     private final Handler handler = new Handler();
-    private int sampleTime;
 
     TextView counterView;
 
@@ -93,9 +93,14 @@ public class Joystick extends AppCompatActivity {
         queue = Volley.newRequestQueue(Joystick.this);
     }
 
+    public void loadconfig(){
+        sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
+        dataGraphMaxDataPointsNumber = Integer.parseInt(Settings.CONFIG_SAMPLE_AMOUNT);
+    }
+
     public void startBtn(View view) {
         // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
-        sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
+        loadconfig();
         if (requestTimer == null) {
             requestTimer = new Timer();
             requestTimerTask = new TimerTask() {
@@ -154,7 +159,7 @@ public class Joystick extends AppCompatActivity {
     }
 
     private void sendRequestv2(String file) {
-        url = Settings.geturlscript(ipAddress);
+        url = Settings.geturlscript(ipAddress,Settings.FILE_NAME);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
