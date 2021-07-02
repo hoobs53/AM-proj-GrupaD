@@ -1,8 +1,26 @@
-const getdata_url = "http://192.168.0.101/cgi-bin/get_pixels.py";
-const setdata_url = "http://192.168.0.101/cgi-bin/led_display.py";
+const getdata_url = "http://192.168.0.103/cgi-bin/get_pixels.py";
+const setdata_url = "http://192.168.0.103/cgi-bin/led_display.py";
+
+var get_url = "http://192.168.0.103/cgi-bin/get_pixels.py";
+var set_url = "http://192.168.0.103/cgi-bin/led_display.py";
+var config_url = "http://192.168.0.103/config.json"
 
 var currentLedState = new Array(64);
 var displayLedState = new Array(64);
+
+function loadParams(){
+	$.ajax(config_url, {
+		type: 'GET', dataType: 'json',
+		success: function(responseJSON) {
+			let ip = responseJSON["ip"];
+			$("#ip").val(ip);
+			
+			get_url = "http://" + ip + "cgi-bin/get_pixels.py";
+			set_url = "http://" + ip + "cgi-bin/led_display.py";
+			config_url = "http://" + ip + "cgi-bin/config.json";
+		}
+	});
+}
 
 function checkIfChanged(){
 	for(let i = 0; i < displayLedState.length; i++){
@@ -24,12 +42,28 @@ function updateStatus(){
 	}
 }
 
+function changeColorBox() {
+	let r = $("#seekbarR").val();
+	let g = $("#seekbarG").val();
+	let b = $("#seekbarB").val();
+	let color = "rgb(" + r + ", " + g + ", " + b + ")";
+	$("div.colorBox").css("background-color", color);
+}
+
+
+function runListeners() {
+	seekbarR.addEventListener('click', changeColorBox);
+	seekbarB.addEventListener('click', changeColorBox);
+	seekbarG.addEventListener('click', changeColorBox);
+}
+
 function changeColor() {
 	let r = $("#seekbarR").val();
 	let g = $("#seekbarG").val();
 	let b = $("#seekbarB").val();
 	let color = "rgb(" + r + ", " + g + ", " + b + ")";
 	$(this).css("background-color", color);
+	$("div.colorBox").css("background-color", color);
 	let id = $(this).attr('id').split('_')[1]
 	displayLedState[id][0] = r;
 	displayLedState[id][1] = g;
@@ -128,6 +162,7 @@ function init() {
 
 $(document).ready(() => { 
 	init();
+	runListeners();
 	$("#send").click(setLeds);
 	$("#clear").click(clearAll);
 });

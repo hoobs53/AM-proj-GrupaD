@@ -12,7 +12,7 @@
 	<div>
 	<h1 class="text-center title">Led matrix:</h1>
 	</div>
-	<div class="container border border-primary rounded ledcontrol" id="lecontrol">
+	<div class="container border border-primary rounded ledcontrol" id="ledcontrol">
 	<p id="status" class="text-center status" style="color:red"></p>
 	<div class="container led_matrix" id="led_matrix"></div>
 	<div class="seekbars">	
@@ -20,11 +20,12 @@
 			G<input type="range" min="0" max="248" value="0" class="slider sliderG" id="seekbarG"><br>
 			B<input type="range" min="0" max="248" value="0" class="slider sliderB" id="seekbarB"><br>
 		</div>
-				<div class="bts">	
+	<!--<div>-->
 		<br>
 			<button id="send" type="button" class="btn btn-primary menuitem">Send</button>
+			<div id="colorBox"  class="colorBox"></div>
 			<button id="clear" type="button" class="btn btn-primary menuitem">Clear all</button>
-		</div>
+	<!--</div>-->
 	</div>	
   </body>
 </html> 
