@@ -1,0 +1,14 @@
+[Unit]
+Description=Save PHT
+After=network.target
+
+[Service]
+ExecStart=/home/pi/Desktop/save_pht.py
+WorkingDirectory=/home/pi/Desktop
+StandardOutput=inherit
+StandardError=inherit
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
