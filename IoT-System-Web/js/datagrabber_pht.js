@@ -153,7 +153,7 @@ function chartInit()
 					}
 				},{
 					id: 'B',
-					position: 'left',
+					position: 'right',
 					scaleLabel: {
 						display: true,
 						labelString: 'Measurements [%, *C]'

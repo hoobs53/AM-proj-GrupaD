@@ -64,7 +64,7 @@ function loadConf(data){
 	maxSamplesNumber = parseInt(data["sample_amount"]);       ///< maximum number of samples
 	ipAddress = data["ip"];   ///< ip address
 	chartInit();
-	setUrl(ipAdress);
+	setUrl(ipAddress);
 }
 
 function configInit(){

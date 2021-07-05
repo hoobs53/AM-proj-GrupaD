@@ -20,3 +20,19 @@
 	justify-content: center;
 	flex-direction: column;
 }
+
+.navigation {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+}
+
+.coordinates {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+}
+
+.coords {
+	margin: 5%;
+}
