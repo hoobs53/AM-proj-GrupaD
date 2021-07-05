@@ -75,8 +75,6 @@ namespace MultiWPFApp.ViewModel
         public PlotModel DataPlotModel { get; set; }
         public ButtonCommand StartButton { get; set; }
         public ButtonCommand StopButton { get; set; }
-        public ButtonCommand UpdateConfigButton { get; set; }
-        public ButtonCommand DefaultConfigButton { get; set; }
 
         private int timeStamp = 0;
         private ConfigParams config = new ConfigParams();
@@ -114,8 +112,6 @@ namespace MultiWPFApp.ViewModel
             // Initializing buttons
             StartButton = new ButtonCommand(StartTimer);
             StopButton = new ButtonCommand(StopTimer);
-            UpdateConfigButton = new ButtonCommand(UpdateConfig);
-            DefaultConfigButton = new ButtonCommand(DefaultConfig);
 
             url = config.Url;
             sampleTime = config.SampleTime;

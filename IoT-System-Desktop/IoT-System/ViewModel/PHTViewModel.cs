@@ -47,8 +47,6 @@ namespace MultiWPFApp.ViewModel
         public PlotModel DataPlotModel { get; set; }
         public ButtonCommand StartButton { get; set; }
         public ButtonCommand StopButton { get; set; }
-        public ButtonCommand UpdateConfigButton { get; set; }
-        public ButtonCommand DefaultConfigButton { get; set; }
 
         private int timeStamp = 0;
         private ConfigParams config = new ConfigParams();
@@ -70,27 +68,34 @@ namespace MultiWPFApp.ViewModel
                 Unit = "sec",
                 Title = "Time"
             });
-
             DataPlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Minimum = 0,
-                Maximum = 1500,
-                Key = "Vertical",
-                Unit = "hPA, %, *C",
-                Title = "Measurements"
+                Maximum = 2000,
+                Key = "VerticalPressure",
+                Unit = "hPA",
+                Title = "Pressure"
+            });
+
+            DataPlotModel.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Right,
+                Minimum = -25,
+                Maximum = 120,
+                Key = "VerticalHumTemp",
+                Unit = "%, *C",
+                Title = "Humidity, Temp"
             });
 
             // Adding series for each orientation
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Pressure", Color = OxyColor.Parse("#FFFF0000") });
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Humidity", Color = OxyColor.Parse("#FF00FF00") });
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Temperature", Color = OxyColor.Parse("#FF0000FF") });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "Pressure", Color = OxyColor.Parse("#FFFF0000"), YAxisKey = "VerticalPressure" });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "Humidity", Color = OxyColor.Parse("#FF00FF00"), YAxisKey = "VerticalHumTemp" });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "Temperature", Color = OxyColor.Parse("#FF0000FF"), YAxisKey = "VerticalHumTemp" });
 
             // Initializing buttons
             StartButton = new ButtonCommand(StartTimer);
             StopButton = new ButtonCommand(StopTimer);
-            UpdateConfigButton = new ButtonCommand(UpdateConfig);
-            DefaultConfigButton = new ButtonCommand(DefaultConfig);
 
             url = config.Url;
             sampleTime = config.SampleTime;
