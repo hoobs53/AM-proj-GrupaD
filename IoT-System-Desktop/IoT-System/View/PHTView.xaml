@@ -50,14 +50,14 @@
                 Grid.Column="0"
                 Height="30" 
                 Width="100"
-                Margin="0,10,30,10" 
+                Margin="0,10,200,10" 
                 Command="{Binding StartButton}" 
                 CommandParameter="START"
                 HorizontalAlignment="Right">
                 START
             </Button>
             <Button 
-                Grid.Column="1" 
+                Grid.Column="3" 
                 Height="30" 
                 Width="100" 
                 Margin="0,10,15,10" 

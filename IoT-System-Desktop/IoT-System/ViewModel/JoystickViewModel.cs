@@ -107,7 +107,7 @@ namespace MultiWPFApp.ViewModel
             });
 
             // Adding series for each orientation
-            DataPlotModel.Series.Add(new LineSeries() { Title = "Point position", Color = OxyColor.Parse("#FFFF0000") });
+            DataPlotModel.Series.Add(new LineSeries() { Title = "Point position", Color = OxyColor.Parse("#FFFF0000"), MarkerSize=5, MarkerType=MarkerType.Circle});
 
             // Initializing buttons
             StartButton = new ButtonCommand(StartTimer);
@@ -124,7 +124,10 @@ namespace MultiWPFApp.ViewModel
         {
             LineSeries xLineSeries = DataPlotModel.Series[0] as LineSeries;
 
-
+            if (xLineSeries.Points.Count >= 1)
+            {
+                xLineSeries.Points.Clear();
+            }
             xLineSeries.Points.Add(new DataPoint(x, y));
 
             //if (xLineSeries.Points.Count > config.maxSampleDefault)
