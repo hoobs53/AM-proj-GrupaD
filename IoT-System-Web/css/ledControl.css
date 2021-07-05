@@ -48,10 +48,23 @@
 	margin-top: 15px;
 }
 
+.navigation {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+}
+
 .colorBox {
-	display: inline-block;
+	display: inline-flex;
   background-color: rgb(0,0,0);
   width: 50px;
-  height: 35px;
-  margin: 0;
+  height: 40px;
+}
+
+#send {
+	margin-bottom: 30px;
+}
+
+#clear {
+	margin-bottom: 30px;
 }
