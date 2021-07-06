@@ -15,55 +15,11 @@ namespace MultiWPFApp.Model
 {
     public class ServerIoT
     {
-        Random rand = new Random();
-
-        public JArray getMeasurements()
-        {
-            string jsonText = "[";
-
-            jsonText += "{\"Name\":\"Temperature\",\"Data\":" + (23.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"C\"},";
-            jsonText += "{\"Name\":\"Pressure\",\"Data\":" + (1023.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"hPa\"},";
-            jsonText += "{\"Name\":\"Humidity\",\"Data\":" + (43.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"%\"},";
-
-            jsonText += "]";
-
-            return JArray.Parse(jsonText);
-        }
-        public JArray getOrientation()
-        {
-            string jsonText = "[";
-
-            jsonText += "{\"Name\":\"Roll\",\"Data\":" + (180.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"Deg\"},";
-            jsonText += "{\"Name\":\"Pitch\",\"Data\":" + (0.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"Deg\"},";
-            jsonText += "{\"Name\":\"Yaw\",\"Data\":" + (270.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"Deg\"}";
-
-            jsonText += "]";
-
-            return JArray.Parse(jsonText);
-        }
-
-        public JArray getJoystick()
-        {
-            string jsonText = "[";
-
-            jsonText += "{\"Name\":\"x\",\"Data\":" + (180.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"-\"},";
-            jsonText += "{\"Name\":\"y\",\"Data\":" + (0.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"-\"},";
-            jsonText += "{\"Name\":\"mid_counter\",\"Data\":" + (270.0 + rand.NextDouble()).ToString(CultureInfo.InvariantCulture) + ",\"Unit\":\"-\"}";
-
-            jsonText += "]";
-
-            return JArray.Parse(jsonText);
-        }
-
         private string ip;
 
         public ServerIoT(string _ip)
         {
             ip = _ip;
-        }
-        public ServerIoT()
-        {
-
         }
         public string ScriptUrl
         {
@@ -161,67 +117,5 @@ namespace MultiWPFApp.Model
             readStream.Close();
             return result;
         }
-
-        //public async Task<string> GETwithRequest()
-        //{
-        //    string responseText = null;
-
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetFileUrl());
-
-        //        request.Method = "GET";
-
-        //        using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-        //        using (Stream stream = response.GetResponseStream())
-        //        using (StreamReader reader = new StreamReader(stream))
-        //        {
-        //            responseText = await reader.ReadToEndAsync();
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine("NETWORK ERROR");
-        //        Debug.WriteLine(e);
-        //    }
-
-        //    return responseText;
-        //}
-
-        //public async Task<string> POSTwithRequest()
-        //{
-        //    string responseText = null;
-
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(GetScriptUrl());
-
-        //        // POST Request data 
-        //        var requestData = "filename=chartdata";
-        //        byte[] byteArray = Encoding.UTF8.GetBytes(requestData);
-        //        // POST Request configuration
-        //        request.Method = "POST";
-        //        request.ContentType = "application/x-www-form-urlencoded";
-        //        request.ContentLength = byteArray.Length;
-        //        // Wrire data to request stream
-        //        Stream dataStream = request.GetRequestStream();
-        //        dataStream.Write(byteArray, 0, byteArray.Length);
-        //        dataStream.Close();
-
-        //        using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-        //        using (Stream stream = response.GetResponseStream())
-        //        using (StreamReader reader = new StreamReader(stream))
-        //        {
-        //            responseText = await reader.ReadToEndAsync();
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine("NETWORK ERROR");
-        //        Debug.WriteLine(e);
-        //    }
-
-        //    return responseText;
-        //}
     }
 }

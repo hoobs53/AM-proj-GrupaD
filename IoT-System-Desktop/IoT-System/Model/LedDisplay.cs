@@ -47,9 +47,6 @@ namespace MultiWPFApp.Model
         public UInt16?[,,] model;
         private UInt16?[,,] currentModel;
 
-        /**
-         * @brief Default constructor
-         */
         public LedDisplay(int [][]pixelsState)
         {
             model = new UInt16?[SizeX, SizeY, 3];
@@ -74,13 +71,7 @@ namespace MultiWPFApp.Model
             pixels = pixelsState;
             initDisplay();
         }
-
-        /**
-         * Conversion method: LED x-y position to position/color data in JSON format
-         * @param x LED horizontal position in display
-         * @param y LED vertical position in display
-         * @return Position/color data in JSON format: [x,y,r,g,b] (x,y: 0-7; r,g,b: 0-255)
-         */
+        // returns json array for server request
         private JArray IndexToJsonArray(int x, int y)
         {
             JArray array = new JArray();
@@ -98,23 +89,7 @@ namespace MultiWPFApp.Model
             }
             return array;
         }
-
-        /**
-         * @brief Null color check
-         * @param x LED horizontal position in display
-         * @param y LED vertical position in display
-         * @return False if color is Null; True otherwise
-         */
-        private bool ColorNotNull(int x, int y)
-        {
-            return !((model[x, y, 0] == null) || (model[x, y, 1] == null) || (model[x, y, 2] == null));
-        }
-
-        /**
-         * @brief Update display model with active color
-         * @param x LED horizontal position in display
-         * @param y LED vertical position in display
-         */
+        // updates model with current values
         public void UpdateModel(int x, int y)
         {
             model[x, y, 0] = _activeColorR;
@@ -123,7 +98,7 @@ namespace MultiWPFApp.Model
 
             checkIfChanged();
         }
-
+        // compare virtual model with physical matrix
         public void checkIfChanged()
         {
             status = "";
@@ -138,9 +113,7 @@ namespace MultiWPFApp.Model
                 }
             }
         }
-        /**
-         * @brief LED display data model clear - fill with all components with Null
-         */
+        // clears all LEDs
         public void ClearModel()
         {
             for (int i = 0; i < SizeX; i++)
@@ -158,6 +131,7 @@ namespace MultiWPFApp.Model
                 }
             }
         }
+        // initializes display with values on physical model
         public void initDisplay()
         {
             ushort? r, g, b;
@@ -175,10 +149,6 @@ namespace MultiWPFApp.Model
                 }
             }
         }
-        /**
-         * @brief Generate HTTP POST request parameters for LED display control via IoT server script
-         * @return HTTP POST request parameters as Key-Value pairs
-         */
         public List<KeyValuePair<string, string>> getControlPostData()
         {
             var postData = new List<KeyValuePair<string, string>>();
@@ -187,7 +157,6 @@ namespace MultiWPFApp.Model
             {
                 for (int j = 0; j < SizeY; j++)
                 {
-                    //if (ColorNotNull(i, j))
                         postData.Add(
                             new KeyValuePair<string, string>(
                                 "LED" + i.ToString() + j.ToString(),
@@ -204,10 +173,6 @@ namespace MultiWPFApp.Model
             return postData;
         }
 
-        /**
-         * @brief Generate HTTP POST request parameters for clearing LED display via IoT server script
-         * @return HTTP POST request parameters as Key-Value pairs
-         */
         List<KeyValuePair<string, string>> clearData;
         public List<KeyValuePair<string, string>> getClearPostData()
         {

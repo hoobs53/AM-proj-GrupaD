@@ -52,12 +52,12 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" >
-            <Button Style="{StaticResource MenuButton}" Command="{Binding DisplayCommandView}">LED Display</Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding ListCommandView}">List View </Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding RPYCommandView}">RPY Chart</Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding PHTCommandView}">PHT Chart</Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding JoystickCommandView}">Joystick Chart</Button>
-            <Button Style="{StaticResource MenuButton}" Command="{Binding ConfigCommandView}">Config</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding DisplayCommandView}" Background="DeepSkyBlue">LED Display</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding ListCommandView}" Background="DeepSkyBlue">List View </Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding RPYCommandView}" Background="DeepSkyBlue">RPY Chart</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding PHTCommandView}" Background="DeepSkyBlue">PHT Chart</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding JoystickCommandView}" Background="DeepSkyBlue">Joystick Chart</Button>
+            <Button Style="{StaticResource MenuButton}" Command="{Binding ConfigCommandView}" Background="DeepSkyBlue">Config</Button>
         </StackPanel>
 
         <ContentControl Grid.Column="1" Content="{Binding ContentViewModel}"/>

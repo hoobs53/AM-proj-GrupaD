@@ -113,7 +113,7 @@ namespace MultiWPFApp.ViewModel
             StartButton = new ButtonCommand(StartTimer);
             StopButton = new ButtonCommand(StopTimer);
 
-            url = config.Url;
+            url = config.Ip;
             sampleTime = config.SampleTime;
 
             server = new ServerIoT(Url);
@@ -130,19 +130,13 @@ namespace MultiWPFApp.ViewModel
             }
             xLineSeries.Points.Add(new DataPoint(x, y));
 
-            //if (xLineSeries.Points.Count > config.maxSampleDefault)
-            //{
-            //    xLineSeries.Points.RemoveAt(0);
-            //    yLineSeries.Points.RemoveAt(0);
-            //}
-
             XPoint = x.ToString();
             YPoint = y.ToString();
-            if (t >= config.XAxisMax)
-            {
-                DataPlotModel.Axes[0].Minimum = (t - config.XAxisMax);
-                DataPlotModel.Axes[0].Maximum = t + config.SampleTime / 1000.0; ;
-            }
+            //if (t >= config.XAxisMax)
+            //{
+            //    DataPlotModel.Axes[0].Minimum = (t - config.XAxisMax);
+            //    DataPlotModel.Axes[0].Maximum = t + config.SampleTime / 1000.0; ;
+            //}
 
             DataPlotModel.InvalidatePlot(true);
         }
@@ -156,7 +150,8 @@ namespace MultiWPFApp.ViewModel
             try
             {
                 JoystickData responseJson = JsonConvert.DeserializeObject<JoystickData>(responseText);
-                UpdatePlot(timeStamp / 1000.0, responseJson.x, responseJson.y);
+                if (responseJson != null)
+                    UpdatePlot(timeStamp / 1000.0, responseJson.x, responseJson.y);
             }
             catch (Exception e)
             {
@@ -172,7 +167,7 @@ namespace MultiWPFApp.ViewModel
             UpdatePlot();
         }
 
-
+        // starts timer interval
         private void StartTimer()
         {
             if (RequestTimer == null)
@@ -184,7 +179,7 @@ namespace MultiWPFApp.ViewModel
                 DataPlotModel.ResetAllAxes();
             }
         }
-
+        // stops the timer
         private void StopTimer()
         {
             if (RequestTimer != null)
@@ -192,38 +187,6 @@ namespace MultiWPFApp.ViewModel
                 RequestTimer.Enabled = false;
                 RequestTimer = null;
             }
-        }
-
-        // Update parameters when Update Config button is clicked
-        private void UpdateConfig()
-        {
-            bool restartTimer = (RequestTimer != null);
-
-            if (restartTimer)
-                StopTimer();
-
-            config = new ConfigParams(url,sampleTime, 100);
-            server = new ServerIoT(Url);
-
-            if (restartTimer)
-                StartTimer();
-        }
-
-        // Loads default config
-        private void DefaultConfig()
-        {
-            bool restartTimer = (RequestTimer != null);
-
-            if (restartTimer)
-                StopTimer();
-
-            config = new ConfigParams();
-            Url = config.Url;
-            SampleTime = config.SampleTime.ToString();
-            server = new ServerIoT(Url);
-
-            if (restartTimer)
-                StartTimer();
         }
 
     }

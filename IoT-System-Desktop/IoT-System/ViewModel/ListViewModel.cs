@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System;
 using System.ComponentModel;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace MultiWPFApp.ViewModel
@@ -14,41 +16,43 @@ namespace MultiWPFApp.ViewModel
         public ObservableCollection<MeasurementViewModel> Orientation { get; set; }
 
         public ObservableCollection<MeasurementViewModel> Joystick { get; set; }
-        public ButtonCommand Refresh { get; set; }
+        public ButtonCommand Refresh_btn { get; set; }
 
         private ConfigParams config;
-        private ServerIoT ServerMock;
+        private ServerIoT Server;
 
         public ListViewModel()
         {
             config = new ConfigParams();
-            ServerMock = new ServerIoT(config.Url);
+            Server = new ServerIoT(config.Ip);
             // Create new collection for measurements data
             Measurements = new ObservableCollection<MeasurementViewModel>();
             Orientation = new ObservableCollection<MeasurementViewModel>();
             Joystick = new ObservableCollection<MeasurementViewModel>();
 
             // Bind button with action
-            Refresh = new ButtonCommand(RefreshHandler);
+            Refresh_btn = new ButtonCommand(Refresh);
         }
 
-        void RefreshHandler()
+        void Refresh()
         {
-            // Read data from server in JSON array format
-            string response = ServerMock.POSTgetMeasurements();
-            MeasurementModel measurementObj = JsonConvert.DeserializeObject<MeasurementModel>(response);
-            JArray measurementsJsonArray = measurementObj.measurements;
-            // Convert generic JSON array container to list of specific type
-            var measurementsList = measurementsJsonArray.ToObject<List<MeasurementListModel>>();
+            try
+            {
+                // Read data from server in JSON array format
+                string response = Server.POSTgetMeasurements();
+                MeasurementModel measurementObj = JsonConvert.DeserializeObject<MeasurementModel>(response);
+                JArray measurementsJsonArray = measurementObj.measurements;
+                // Convert generic JSON array container to list of specific type
+                var measurementsList = measurementsJsonArray.ToObject<List<MeasurementListModel>>();
 
-            JArray orientationJsonArray = measurementObj.orientation;
+                JArray orientationJsonArray = measurementObj.orientation;
 
-            var orientationList = orientationJsonArray.ToObject<List<MeasurementListModel>>();
+                var orientationList = orientationJsonArray.ToObject<List<MeasurementListModel>>();
 
-            JArray joystickJsonArray = measurementObj.joystick;
+                JArray joystickJsonArray = measurementObj.joystick;
 
-            var joystickList = joystickJsonArray.ToObject<List<MeasurementListModel>>();
-
+                var joystickList = joystickJsonArray.ToObject<List<MeasurementListModel>>();
+            
             // Add new elements to measurement collection
             if (Measurements.Count < measurementsList.Count)
             {
@@ -85,7 +89,12 @@ namespace MultiWPFApp.ViewModel
                 for (int i = 0; i < Joystick.Count; i++)
                     Joystick[i].UpdateWithModel(joystickList[i]);
             }
-
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("JSON DATA ERROR");
+                Debug.WriteLine(e);
+            }
         }
 
     }
