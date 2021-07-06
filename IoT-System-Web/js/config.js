@@ -1,6 +1,7 @@
-var url_save = "http://192.168.0.103/save_params.php";
-var url_load = "http://192.168.0.103/config.json";
+var url_save = "http://192.168.0.103/save_params.php"; //< setting input values
+var url_load = "http://192.168.0.103/config.json"; //< loading values from file
 
+//sets default values
 function setDefaultConfig() {
 	$("#ip").val("192.168.0.103");
 	$("#sample_time").val(200);
@@ -8,6 +9,7 @@ function setDefaultConfig() {
 	setConfig();
 }
 
+//sets values from the input
 function setConfig(){
 	var ip = $("#ip").val();
 	var sampletime = $("#sample_time").val();
@@ -22,6 +24,7 @@ function setConfig(){
 	$.post(url_save, params);
 }
 
+//fills input fields with data from "config.json"
 function loadParams(){
 	$.ajax(url_load, {
 		type: 'GET', dataType: 'json',

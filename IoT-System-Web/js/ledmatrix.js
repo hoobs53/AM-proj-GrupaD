@@ -1,13 +1,11 @@
-const getdata_url = "http://192.168.0.103/cgi-bin/get_pixels.py";
-const setdata_url = "http://192.168.0.103/cgi-bin/led_display.py";
+var getdata_url = "http://192.168.0.103/cgi-bin/get_pixels.py"; ///< server app with config data
+var setdata_url = "http://192.168.0.103/cgi-bin/led_display.py"; ///< server app with config data
+var config_url = "http://192.168.0.103/config.json" ///< server app with config data
 
-var get_url = "http://192.168.0.103/cgi-bin/get_pixels.py";
-var set_url = "http://192.168.0.103/cgi-bin/led_display.py";
-var config_url = "http://192.168.0.103/config.json"
+var currentLedState = new Array(64); ///< array with states of physical LEDs
+var displayLedState = new Array(64); ///< array with states of display LEDs
 
-var currentLedState = new Array(64);
-var displayLedState = new Array(64);
-
+// setting URLs using recieved IP from server app using GET method
 function loadParams(){
 	$.ajax(config_url, {
 		type: 'GET', dataType: 'json',
@@ -15,13 +13,14 @@ function loadParams(){
 			let ip = responseJSON["ip"];
 			$("#ip").val(ip);
 			
-			get_url = "http://" + ip + "cgi-bin/get_pixels.py";
-			set_url = "http://" + ip + "cgi-bin/led_display.py";
+			getdata_url = "http://" + ip + "cgi-bin/get_pixels.py";
+			setdata_url = "http://" + ip + "cgi-bin/led_display.py";
 			config_url = "http://" + ip + "cgi-bin/config.json";
 		}
 	});
 }
 
+// comparing LED arrays to see if changed
 function checkIfChanged(){
 	for(let i = 0; i < displayLedState.length; i++){
 		let test = currentLedState[i][0];
@@ -33,6 +32,7 @@ function checkIfChanged(){
 	return false;
 }
 
+// updating status text
 function updateStatus(){
 	if(checkIfChanged()){
 		$("#status").text("UNSAVED CHANGES*");
@@ -42,6 +42,7 @@ function updateStatus(){
 	}
 }
 
+// changing color of the visualisation
 function changeColorBox() {
 	let r = $("#seekbarR").val();
 	let g = $("#seekbarG").val();
@@ -50,20 +51,20 @@ function changeColorBox() {
 	$("div.colorBox").css("background-color", color);
 }
 
-
+// running listeners for changing seekerbars states
 function runListeners() {
 	seekbarR.addEventListener('click', changeColorBox);
 	seekbarB.addEventListener('click', changeColorBox);
 	seekbarG.addEventListener('click', changeColorBox);
 }
 
+// changing color of LEDs in web matrix
 function changeColor() {
 	let r = $("#seekbarR").val();
 	let g = $("#seekbarG").val();
 	let b = $("#seekbarB").val();
 	let color = "rgb(" + r + ", " + g + ", " + b + ")";
 	$(this).css("background-color", color);
-	$("div.colorBox").css("background-color", color);
 	let id = $(this).attr('id').split('_')[1]
 	displayLedState[id][0] = r;
 	displayLedState[id][1] = g;
@@ -71,7 +72,8 @@ function changeColor() {
 	updateStatus();
 }
 
-function clearAll() {
+// sets all LED colors to (0, 0, 0)
+function clearDisplay() {
 	for (var i=0; i < 64; i++) {
 		$("#led_"+i).css("background-color", "#000000");
 		currentLedState[i] = [0, 0 ,0];
@@ -81,6 +83,7 @@ function clearAll() {
 	setLeds();
 }
 
+// diplay initialization
 function initDisplay(responseJSON){
 	let r, g, b, color;
 	let row, col;
@@ -111,6 +114,7 @@ function initDisplay(responseJSON){
 	}
 }
 
+// sending LED data to physical LEDs
 function sendData() {
 	let x, y, id;
 	let r, g, b;
@@ -140,17 +144,17 @@ function sendData() {
 	return obj;
 }
 
-
+// setting LED colors
 function setLeds() {
 	params = sendData();
 	console.log(params);
 	$.post(setdata_url, params, function(data){
 		console.log(data);
 	});
-	
 	updateStatus();
 }
 
+// recieving LED data from server app using GET method
 function init() {
 	$.ajax(getdata_url, {
 	type: 'GET', dataType: 'json',
@@ -164,5 +168,5 @@ $(document).ready(() => {
 	init();
 	runListeners();
 	$("#send").click(setLeds);
-	$("#clear").click(clearAll);
+	$("#clear").click(clearDisplay);
 });

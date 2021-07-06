@@ -17,7 +17,9 @@ var timer; ///< request timer
 var resource_url = "http://192.168.0.103/resource.php"; ///< server app with RPY orientation in JSON format
 var get_conf_url = "http://192.168.0.103/get_config.php"; ///< server app with configuration in JSON format
 
-function addData(y){
+
+// updates data to the chart
+function updatePlot(y){
 	if(ydataP.length > maxSamplesNumber)
 	{
 		removeOldData();
@@ -30,6 +32,7 @@ function addData(y){
 	chart.update();
 }
 
+// removes data from the chart
 function removeOldData(){
 	xdata.splice(0,1);
 	ydataP.splice(0,1);
@@ -38,36 +41,24 @@ function removeOldData(){
 }
 
 function startTimer(){
-	timer = setInterval(ajaxJSON, sampleTimeMsec);
+	timer = setInterval(getResources, sampleTimeMsec);
 }
 
 function stopTimer(){
 	clearInterval(timer);
 }
 
-function ajaxJSON() {
+// recieving PHT measurements from server app using POST method
+function getResources() {
 	$.ajax(resource_url, {
 		type: 'POST', dataType: 'json', data: {"filename":"pht"},
 		success: function(responseJSON, status, xhr) {
-			addData(responseJSON);
+			updatePlot(responseJSON);
 		}
 	});
 }
 
-function setUrl(ipAddress) {
-	resource_url = "http://" + ipAddress + "/resource.php";
-	get_conf_url = "http://" + ipAddress + "/get_config.php";
-}
-
-function loadConf(data){
-	sampleTimeMsec = data["sample_time"];  ///< sample time in msec
-	sampleTimeSec = sampleTimeMsec/1000;
-	maxSamplesNumber = parseInt(data["sample_amount"]);       ///< maximum number of samples
-	ipAddress = data["ip"];   ///< ip address
-	chartInit();
-	setUrl(ipAddress);
-}
-
+// recieving config data from server app using GET method
 function configInit(){
 		$.ajax(get_conf_url, {
 		type: 'GET', dataType: 'json',
@@ -80,9 +71,23 @@ function configInit(){
 	})
 }
 
-/**
-* @brief Chart initialization
-*/
+// geting values from received JSON
+function loadConf(data){
+	sampleTimeMsec = data["sample_time"];  ///< sample time in msec
+	sampleTimeSec = sampleTimeMsec/1000;
+	maxSamplesNumber = parseInt(data["sample_amount"]);       ///< maximum number of samples
+	ipAddress = data["ip"];   ///< ip address
+	chartInit();
+	setUrl(ipAddress);
+}
+
+// setting URL with received IP from config file
+function setUrl(ipAddress) {
+	resource_url = "http://" + ipAddress + "/resource.php";
+	get_conf_url = "http://" + ipAddress + "/get_config.php";
+}
+
+// Chart initialization
 function chartInit()
 {
 	// array with consecutive integers: <0, maxSamplesNumber-1>

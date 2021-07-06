@@ -1,6 +1,22 @@
-var ip = "192.168.0.103";
-var url = "http://" + ip + "/get_measurements.php";
+var ipAddress; ///< IP address
 
+var resource_url = 'http://192.168.0.103/get_measurements.php'; ///< server app with measurement data
+var get_conf_url = 'http://192.168.0.103/get_config.php'; ///< server app with config data 
+
+// setting URL with received IP from config file
+function configInit(){
+		$.ajax(get_conf_url, {
+		type: 'GET', dataType: 'json',
+		success: function(responseJSON){
+			ipAddress = data["ip"];
+			resource_url = "http://" + ipAddress + "/get_measurements.php";
+			get_conf_url = "http://" + ipAddress + "/get_config.php";
+		}
+	})
+
+}
+
+// creating cells and rows in tables
 function createRow(table_id, id) {
   var table = document.getElementById(table_id);
   for (var i in id) {
@@ -14,6 +30,7 @@ function createRow(table_id, id) {
 	  }
 }
 
+// deleting rows from tables
 function deleteRow(table_id) {
 	var table = document.getElementById(table_id);
 	var rowCount = document.getElementById(table_id).rows.length;
@@ -22,45 +39,27 @@ function deleteRow(table_id) {
 	}
 }
 
-function emptyCheck(value) {
-  Object.keys(value).length === 0
-    && value.constructor === Object;
-}
-
+// loading new data from server app using GET method
 function refresh() {
-	$.ajax(url, {
+	$.ajax(resource_url, {
 		type: 'GET', dataType: 'json',
 		success: function(responseJSON) {
 			var measurement = responseJSON["measurements"];
 			var orientation = responseJSON["orientation"];
 			var joystick = responseJSON["joystick"];
 						
-				deleteRow("m_table");
-				deleteRow("o_table");
-				deleteRow("j_table");
+				deleteRow("m_table"); //< "m_table" - measurement table
+				deleteRow("o_table"); //< "o_table" - orientation table
+				deleteRow("j_table"); //< "j_table" - joystick table
 				
 				createRow("m_table", measurement);
 				createRow("o_table", orientation);
 				createRow("j_table", joystick);
-				
-				if(emptyCheck(joystick)) {
-				console.log("nie ziala");
-				}
-		},
-		error: function(cokolwiek) {
-		console.log(cokolwiek);
 		}
 	});
 }
 
-
-function test() {
-	while ($('#m_table tr').length > 1) {
-		deleteRow();
-	}
-}
-
 $(document).ready(() => {
-	console.log(url);
+	configInit();
 	$("#refresh").click(refresh);
 });
