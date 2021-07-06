@@ -29,12 +29,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Graph extends AppCompatActivity {
-
+    //IoT server data
     private String ipAddress;
     private String url;
     private  int dataGraphMaxDataPointsNumber;
     private int sampleTime;
 
+    // Graph's variables settings
     private GraphView dataGraph;
     private LineGraphSeries<DataPoint> dataSeries;
     private LineGraphSeries<DataPoint> dataSeries2;
@@ -44,6 +45,7 @@ public class Graph extends AppCompatActivity {
     private final double dataGraphMaxY =  360.0d;
     private final double dataGraphMinY =  0.0d;
 
+    // Timer's variables
     private RequestQueue queue;
     private Timer requestTimer;
     private long requestTimerTimeStamp = 0;
@@ -58,9 +60,10 @@ public class Graph extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
+        // get server's ip addres from settings
         ipAddress = Settings.CONFIG_IP_ADDRESS;
 
-
+        // initialize graph, set title, add data series
         dataGraph = (GraphView)findViewById(R.id.dataGraph);
         dataSeries = new LineGraphSeries<>(new DataPoint[]{});
         dataSeries2 = new LineGraphSeries<>(new DataPoint[]{});
@@ -98,21 +101,23 @@ public class Graph extends AppCompatActivity {
         queue = Volley.newRequestQueue(Graph.this);
     }
 
+    // load config from server
     public void loadconfig(){
         sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
         dataGraphMaxDataPointsNumber = Integer.parseInt(Settings.CONFIG_SAMPLE_AMOUNT);
     }
 
-    public void startBtn(View view) {
-       // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
+    // Start downloading data from server
+    public void startTimer(View view) {
         loadconfig();
         if (requestTimer == null) {
+
             requestTimer = new Timer();
             requestTimerTask = new TimerTask() {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            sendRequestv2("rpy");
+                            sendRequest("rpy");
                         }
                     });
                 }
@@ -121,18 +126,21 @@ public class Graph extends AppCompatActivity {
 
         }
     }
-    public void stopBtn(View view){
+    // Stop downloading data from server
+    public void stopTimer(View view){
         if (requestTimer != null) {
             requestTimer.cancel();
             requestTimer = null;
             requestTimerFirstRequestAfterStop = true;
         }
     }
+    // Calculate time stamps
     private long getValidTimeStampIncrease(long currentTime)
     {
         // Right after start remember current time and return 0
         if(requestTimerFirstRequest)
         {
+
             requestTimerPreviousTime = currentTime;
             requestTimerFirstRequest = false;
             return 0;
@@ -157,23 +165,19 @@ public class Graph extends AppCompatActivity {
         return (currentTime - requestTimerPreviousTime);
     }
 
-
-    private void sendRequestv2(String file) {
+    // Send request for server's data
+    private void sendRequest(String file) {
         url = Settings.geturlscript(ipAddress,Settings.FILE_NAME);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        // Log.d("Response", response);
-                        handleResponse(response);
+                        updatePlot(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // handle error
-                        //Log.d("Error.Response", response);
                     }
                 }
         ) {
@@ -188,7 +192,8 @@ public class Graph extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void handleResponse(String response){
+    // Update plot based on servers response
+    private void updatePlot(String response){
         if(requestTimer != null) {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
@@ -212,6 +217,7 @@ public class Graph extends AppCompatActivity {
             requestTimerPreviousTime = requestTimerCurrentTime;
         }
     }
+    // Handle response from server
     private double [] getData(String response){
         JSONObject object;
         double r = Double.NaN;

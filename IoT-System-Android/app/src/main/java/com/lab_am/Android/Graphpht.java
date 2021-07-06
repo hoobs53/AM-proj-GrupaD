@@ -30,11 +30,13 @@ import java.util.TimerTask;
 
 public class Graphpht extends AppCompatActivity {
 
+    //IoT server data
     private String ipAddress;
     private String url;
     private  int dataGraphMaxDataPointsNumber;
     private int sampleTime;
 
+    // Graph's variables settings
     private GraphView dataGraph;
     private LineGraphSeries<DataPoint> dataSeries;
     private LineGraphSeries<DataPoint> dataSeries2;
@@ -42,12 +44,14 @@ public class Graphpht extends AppCompatActivity {
 
     private final double dataGraphMaxX = 10.0d;
     private final double dataGraphMinX =  0.0d;
-    private final double dataGraphMaxY =  140.0d;
-    private final double dataGraphMinY =  -40.0d;
+    private final double dataGraphMaxY =  2000.0d;
+    private final double dataGraphMinY =  0.0d;
 
-    private final double dataGraphMaxhY =  100.0d;
-    private final double dataGraphMinhY =  0.0d;
+    private final double dataGraphMaxhY =  105.0d;
+    private final double dataGraphMinhY =  -30.1d;
 
+
+    // Timer's variables
     private RequestQueue queue;
     private Timer requestTimer;
     private long requestTimerTimeStamp = 0;
@@ -63,9 +67,10 @@ public class Graphpht extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphpht);
 
+        // get server's ip addres from settings
         ipAddress = Settings.CONFIG_IP_ADDRESS;
 
-
+        // initialize graph, set title, add data series
         dataGraph = (GraphView)findViewById(R.id.dataGraphpht);
         dataSeries = new LineGraphSeries<>(new DataPoint[]{});
         dataSeries2 = new LineGraphSeries<>(new DataPoint[]{});
@@ -81,24 +86,28 @@ public class Graphpht extends AppCompatActivity {
         dataSeries.setColor(Color.RED);
         dataGraph.getViewport().setDrawBorder(true);
 
-        dataGraph.addSeries(dataSeries2);
-        dataSeries2.setColor(Color.GREEN);
-        dataSeries2.setTitle("Temperature");
-
         dataGraph.setTitle("Measurements data");
         GridLabelRenderer gridLabel = dataGraph.getGridLabelRenderer();
         gridLabel.setHorizontalAxisTitle("Time [s]");
-        gridLabel.setVerticalAxisTitle("Measurements [1/10 hPa, C]");
+        gridLabel.setVerticalAxisTitle("Pressure [hPa]");
 
 
-
+        // Set second scale
         dataGraph.getSecondScale().setMaxY(dataGraphMaxhY);
         dataGraph.getSecondScale().setMinY(dataGraphMinhY);
-        dataGraph.getSecondScale().setVerticalAxisTitle("Measurement [%]");
+        dataGraph.getSecondScale().setVerticalAxisTitle("Humidity, Temp [%, C]");
         dataGraph.getSecondScale().setVerticalAxisTitleTextSize(gridLabel.getVerticalAxisTitleTextSize());
         dataGraph.getSecondScale().setVerticalAxisTitleColor(gridLabel.getVerticalAxisTitleColor());
+
+        dataGraph.getSecondScale().addSeries(dataSeries2);
         dataGraph.getSecondScale().addSeries(dataSeries3);
-        dataSeries3.setColor(Color.BLUE);
+
+        gridLabel.setNumHorizontalLabels(6);
+        gridLabel.setNumVerticalLabels(6);
+
+        dataSeries2.setColor(Color.BLUE);
+        dataSeries2.setTitle("Temperature");
+        dataSeries3.setColor(Color.GREEN);
         dataSeries3.setTitle("Humidity");
         gridLabel.setPadding(56);
 
@@ -106,13 +115,15 @@ public class Graphpht extends AppCompatActivity {
         queue = Volley.newRequestQueue(Graphpht.this);
     }
 
+
+    // load config from server
     public void loadconfig(){
         sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
         dataGraphMaxDataPointsNumber = Integer.parseInt(Settings.CONFIG_SAMPLE_AMOUNT);
     }
 
-    public void startBtn(View view) {
-        // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
+    // Start downloading data from server
+    public void startTimer(View view) {
         loadconfig();
         if (requestTimer == null) {
             requestTimer = new Timer();
@@ -120,7 +131,7 @@ public class Graphpht extends AppCompatActivity {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            sendRequestv2("pht");
+                            sendRequest("pht");
                         }
                     });
                 }
@@ -129,13 +140,17 @@ public class Graphpht extends AppCompatActivity {
 
         }
     }
-    public void stopBtn(View view){
+
+    // Stop downloading data from server
+    public void stopTimer(View view){
         if (requestTimer != null) {
             requestTimer.cancel();
             requestTimer = null;
             requestTimerFirstRequestAfterStop = true;
         }
     }
+
+    // Calculate time stamps
     private long getValidTimeStampIncrease(long currentTime)
     {
         // Right after start remember current time and return 0
@@ -165,7 +180,9 @@ public class Graphpht extends AppCompatActivity {
         return (currentTime - requestTimerPreviousTime);
     }
 
-    private void sendRequestv2(String file) {
+
+    // Send request for server's data
+    private void sendRequest(String file) {
         url = Settings.geturlscript(ipAddress,Settings.FILE_NAME);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -173,7 +190,7 @@ public class Graphpht extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         // Log.d("Response", response);
-                        handleResponse(response);
+                        updatePlot(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -195,7 +212,8 @@ public class Graphpht extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void handleResponse(String response){
+    // Update plot based on servers response
+    private void updatePlot(String response){
         if(requestTimer != null) {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
@@ -219,6 +237,8 @@ public class Graphpht extends AppCompatActivity {
             requestTimerPreviousTime = requestTimerCurrentTime;
         }
     }
+
+    // Handle response from server
     private double [] getData(String response){
         JSONObject object;
         double h = Double.NaN;
@@ -239,7 +259,7 @@ public class Graphpht extends AppCompatActivity {
             p = object.getDouble("pressure");
             t = object.getDouble("temperature");
             result[0] = h;
-            result[1] = p/10;
+            result[1] = p;
             result[2] = t;
         } catch (JSONException e){
             // TODO: handle error

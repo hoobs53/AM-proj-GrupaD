@@ -31,11 +31,13 @@ import java.util.TimerTask;
 
 public class Joystick extends AppCompatActivity {
 
+    //IoT server data
     private String ipAddress;
     private String url;
     private  int dataGraphMaxDataPointsNumber;
     private int sampleTime;
 
+    // Graph's variables settings
     private GraphView dataGraph;
     private PointsGraphSeries<DataPoint> dataSeries;
 
@@ -47,6 +49,7 @@ public class Joystick extends AppCompatActivity {
     double temp_x = 0;
     double temp_y = 0;
 
+    // Timer's variables
     private RequestQueue queue;
     private Timer requestTimer;
     private long requestTimerTimeStamp = 0;
@@ -56,20 +59,25 @@ public class Joystick extends AppCompatActivity {
     private TimerTask requestTimerTask;
     private final Handler handler = new Handler();
 
-    TextView counterView;
+    TextView x_view;
+    TextView y_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joystick);
-        counterView = (TextView)findViewById(R.id.counter);
-        counterView.setText("Counter: 0");
+        // Config textviews for joystick position
+        x_view = (TextView)findViewById(R.id.position_x);
+        x_view.setText("X point: 0");
 
+        y_view = (TextView)findViewById(R.id.position_y);
+        y_view.setText("Y point: 0");
+
+        // get server's ip addres from settings
         ipAddress = Settings.CONFIG_IP_ADDRESS;
 
-
+        // initialize graph, set title, add data series
         dataGraph = (GraphView)findViewById(R.id.dataGraphjoystick);
-
         dataGraph.getViewport().setXAxisBoundsManual(true);
         dataGraph.getViewport().setMinX(dataGraphMinX);
         dataGraph.getViewport().setMaxX(dataGraphMaxX);
@@ -94,12 +102,14 @@ public class Joystick extends AppCompatActivity {
         queue = Volley.newRequestQueue(Joystick.this);
     }
 
+    // load config from server
     public void loadconfig(){
         sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
         dataGraphMaxDataPointsNumber = Integer.parseInt(Settings.CONFIG_SAMPLE_AMOUNT);
     }
 
-    public void startBtn(View view) {
+    // Start downloading data from server
+    public void startTimer(View view) {
         // EditText sampleTimeText = findViewById(R.id.sampleTimeText)
         loadconfig();
         if (requestTimer == null) {
@@ -108,7 +118,7 @@ public class Joystick extends AppCompatActivity {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            sendRequestv2("joystick");
+                            sendRequest("joystick");
                         }
                     });
                 }
@@ -117,13 +127,15 @@ public class Joystick extends AppCompatActivity {
 
         }
     }
-    public void stopBtn(View view){
+    // Stop downloading data from server
+    public void stopTimer(View view){
         if (requestTimer != null) {
             requestTimer.cancel();
             requestTimer = null;
             requestTimerFirstRequestAfterStop = true;
         }
     }
+    // Calculate time stamps
     private long getValidTimeStampIncrease(long currentTime)
     {
         // Right after start remember current time and return 0
@@ -153,13 +165,15 @@ public class Joystick extends AppCompatActivity {
         return (currentTime - requestTimerPreviousTime);
     }
 
+    // Create new data series same as previous
     private void createNewDataseries(){
         dataSeries = new PointsGraphSeries<>(new DataPoint[]{});
         dataSeries.setColor(Color.RED);
         dataSeries.setSize(15);
     }
 
-    private void sendRequestv2(String file) {
+    // Send request for server's data
+    private void sendRequest(String file) {
         url = Settings.geturlscript(ipAddress,Settings.FILE_NAME);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -167,7 +181,7 @@ public class Joystick extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         // Log.d("Response", response);
-                        handleResponse(response);
+                        updatePlot(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -189,7 +203,8 @@ public class Joystick extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void handleResponse(String response){
+    // Update plot based on servers response
+    private void updatePlot(String response){
         if(requestTimer != null) {
             // get time stamp with SystemClock
             long requestTimerCurrentTime = SystemClock.uptimeMillis(); // current time
@@ -201,6 +216,8 @@ public class Joystick extends AppCompatActivity {
             double timeStamp = requestTimerTimeStamp / 1000.0; // [sec]
             boolean scrollGraph = false;
 
+            // Check if previous coordinates are the same as this coordinates, if not delete dataseries and
+            // add new
             if(temp_x != data[0] || temp_y!=data[1]){
                 dataGraph.removeAllSeries();
                 temp_x = data[0];
@@ -213,7 +230,8 @@ public class Joystick extends AppCompatActivity {
             {
                 dataSeries.appendData(new DataPoint(data[0], data[1]),scrollGraph,dataGraphMaxDataPointsNumber);
             }
-            counterView.setText("Counter: " + (int)data[2]);
+            x_view.setText("X point: " + (int)data[0]);
+            y_view.setText("Y point: " + (int)data[1]);
             // update plot series
 
 
@@ -224,6 +242,8 @@ public class Joystick extends AppCompatActivity {
             requestTimerPreviousTime = requestTimerCurrentTime;
         }
     }
+
+    // Handle response from server
     private double [] getData(String response){
         JSONObject object;
         double x = Double.NaN;

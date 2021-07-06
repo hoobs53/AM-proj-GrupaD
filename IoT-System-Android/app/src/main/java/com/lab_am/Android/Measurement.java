@@ -1,5 +1,8 @@
 package com.lab_am.Android;
 
+
+// Class data storage for list view
+
 public class Measurement {
     private String name;
     private String value;

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 
 
 public class MeasurementList extends AppCompatActivity {
+
+    // Variables for data storage and data views
     private ArrayList<Measurement> measurementList;
     private ArrayList<Measurement> measurementList2;
     private ArrayList<Measurement> measurementList3;
@@ -34,15 +36,8 @@ public class MeasurementList extends AppCompatActivity {
     private RecyclerView recyclerView2;
     private RecyclerView recyclerView3;
 
-
+    //IoT server data
     private String ipAddress;
-   // private int sampleTime;
-
-
-//    private RequestQueue queue;
-//    private Timer requestTimer;
-//    private TimerTask requestTimerTask;
-//    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,33 +53,11 @@ public class MeasurementList extends AppCompatActivity {
         ipAddress = Settings.CONFIG_IP_ADDRESS;
     }
 
+    // Referesh button
     public void Refresh(View v) {
-      //  sampleTime =  Integer.parseInt(Settings.CONFIG_SAMPLE_TIME);
         getData();
-
-//        if(requestTimer == null) {
-//            // set a new Timer
-//            requestTimer = new Timer();
-//
-//            // initialize the TimerTask's job
-//            requestTimerTask = new TimerTask() {
-//                public void run() {
-//                    handler.post(new Runnable() {
-//                        public void run() {//getdata here  }
-//                    });
-//                }
-//            };
-//            requestTimer.schedule(requestTimerTask, 0, sampleTime);
-//
-//        }
     }
 
-//    public void stop(View v){
-//        if (requestTimer != null) {
-//            requestTimer.cancel();
-//            requestTimer = null;
-//        }
-//    }
     private void setAdapter(RecyclerView rec_view, ArrayList<Measurement> meas_list){
         recyclerAdapter adapter = new recyclerAdapter(meas_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -92,6 +65,8 @@ public class MeasurementList extends AppCompatActivity {
         rec_view.setItemAnimator(new DefaultItemAnimator());
         rec_view.setAdapter(adapter);
     }
+
+
     public void setMeasurementList(JSONArray array_, ArrayList<Measurement> meas_list, RecyclerView rec_view){
         try {
             int len = array_.length();
@@ -108,7 +83,7 @@ public class MeasurementList extends AppCompatActivity {
         }
     }
 
-
+    // Handle response from server
     public void getData() {
         try {
             measurementList.clear();
