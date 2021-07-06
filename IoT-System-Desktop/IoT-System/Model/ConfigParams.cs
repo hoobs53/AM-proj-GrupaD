@@ -8,16 +8,16 @@ namespace MultiWPFApp.Model
     public class ConfigParams
     {
         private ConfigData configData;
-        public readonly string urlDefault = "192.168.1.101";
-        public string Url;
+        public readonly string ipDefault = "192.168.1.101";
+        public string Ip;
 
         public readonly int sampleTimeDefault = 500;
         public int SampleTime;
 
         public readonly int maxSampleDefault = 100;
         public int MaxSample;
-
-        private void LoadConfig()
+        
+        private void LoadParams()
         {
             using (StreamReader r = new StreamReader("config.json"))
             {
@@ -29,7 +29,7 @@ namespace MultiWPFApp.Model
         {
             get
             {
-                return maxSampleDefault * SampleTime / 1000.0;
+                return MaxSample * SampleTime / 1000.0;
             }
             private set { }
         }
@@ -37,42 +37,27 @@ namespace MultiWPFApp.Model
         {
             try
             {
-                LoadConfig();
+                LoadParams();
                 if (configData != null)
                 {
-                    Url = configData.url;
-                    SampleTime = configData.sample_time;
-                    MaxSample = configData.sample_amount;
+                    Ip = configData.Ip;
+                    SampleTime = configData.Sample_time;
+                    MaxSample = configData.Sample_amount;
                 }
                 else
                 {
-                    Url = urlDefault;
+                    Ip = ipDefault;
                     SampleTime = sampleTimeDefault;
                     MaxSample = maxSampleDefault;
                 }
             }
             catch (Exception e)
             {
-                Url = urlDefault;
+                Ip = ipDefault;
                 SampleTime = sampleTimeDefault;
                 MaxSample = maxSampleDefault;
                 Debug.WriteLine(e);
             }
-        }
-
-        public ConfigParams(string ip, int st, int ms)
-        {
-            try
-            {
-                LoadConfig();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-            Url = ip;
-            SampleTime = st;
-            MaxSample = ms;
         }
     }
 }

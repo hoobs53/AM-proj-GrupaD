@@ -8,8 +8,8 @@ namespace MultiWPFApp.Model
 {
     class ConfigData
     {
-        public int sample_amount { get; set; }
-        public int sample_time { get; set; }
-        public string url { get; set; }
+        public int Sample_amount { get; set; }
+        public int Sample_time { get; set; }
+        public string Ip { get; set; }
     }
 }

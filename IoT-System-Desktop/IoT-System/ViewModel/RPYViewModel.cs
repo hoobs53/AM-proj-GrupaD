@@ -87,7 +87,7 @@ namespace MultiWPFApp.ViewModel
             StartButton = new ButtonCommand(StartTimer);
             StopButton = new ButtonCommand(StopTimer);
 
-            url = config.Url;
+            url = config.Ip;
             sampleTime = config.SampleTime;
 
             server = new ServerIoT(Url);
@@ -130,6 +130,7 @@ namespace MultiWPFApp.ViewModel
             try
             {
                 RPYData responseJson = JsonConvert.DeserializeObject<RPYData>(responseText);
+                if(responseJson!=null)
                 UpdatePlot(timeStamp / 1000.0, responseJson.Roll, responseJson.Pitch, responseJson.Yaw);
             }
             catch (Exception e)
@@ -146,7 +147,7 @@ namespace MultiWPFApp.ViewModel
             UpdatePlot();
         }
 
-
+        // starts timer interval
         private void StartTimer()
         {
             if (RequestTimer == null)
@@ -158,7 +159,7 @@ namespace MultiWPFApp.ViewModel
                 DataPlotModel.ResetAllAxes();
             }
         }
-
+        // stops the timer
         private void StopTimer()
         {
             if (RequestTimer != null)
@@ -166,38 +167,6 @@ namespace MultiWPFApp.ViewModel
                 RequestTimer.Enabled = false;
                 RequestTimer = null;
             }
-        }
-
-        // Update parameters when Update Config button is clicked
-        private void UpdateConfig()
-        {
-            bool restartTimer = (RequestTimer != null);
-
-            if (restartTimer)
-                StopTimer();
-
-            config = new ConfigParams(url, sampleTime, 100);
-            server = new ServerIoT(Url);
-
-            if (restartTimer)
-                StartTimer();
-        }
-
-        // Loads default config
-        private void DefaultConfig()
-        {
-            bool restartTimer = (RequestTimer != null);
-
-            if (restartTimer)
-                StopTimer();
-
-            config = new ConfigParams();
-            Url = config.Url;
-            SampleTime = config.SampleTime.ToString();
-            server = new ServerIoT(Url);
-
-            if (restartTimer)
-                StartTimer();
         }
 
     }

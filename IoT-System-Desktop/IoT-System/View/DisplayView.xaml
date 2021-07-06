@@ -87,6 +87,7 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Margin="10" Padding="5"
                     Command="{Binding SendClearCommand}"
+                     Background="DeepSkyBlue"
                     FontSize="15">
                 CLEAR
             </Button>
@@ -96,6 +97,7 @@
                     Background="{Binding SelectedColor}"/>
             <Button Grid.Column="2" Margin="10" Padding="5"
                     Command="{Binding SendRequestCommand}"
+                     Background="DeepSkyBlue"
                     FontSize="15">
                 SEND
             </Button>

@@ -68,30 +68,30 @@ namespace MultiWPFApp.ViewModel
             config = new ConfigParams();
             MaxSamples = config.MaxSample;
             SampleTime = config.SampleTime.ToString();
-            Url = config.Url;
-            SetParams = new ButtonCommand(SaveParams);
-            LoadDefault = new ButtonCommand(DefaultParams);
+            Url = config.Ip;
+            SetParams = new ButtonCommand(SetConfig);
+            LoadDefault = new ButtonCommand(SetDefaultConfig);
         }
         // Saving parameters to JSON file
-        private void SaveParams()
+        private void SetConfig()
         {
             var data = new Dictionary<string, string>();
-            data.Add("sample_time", SampleTime);
-            data.Add("sample_amount", maxSamples.ToString());  
-            data.Add("url", Url);
+            data.Add("Sample_time", SampleTime);
+            data.Add("Sample_amount", maxSamples.ToString());  
+            data.Add("Ip", Url);
             string json = JsonConvert.SerializeObject(data);
             File.WriteAllText("config.json", json);
         }
 
-        private void DefaultParams()
+        private void SetDefaultConfig()
         {
             var data = new Dictionary<string, string>();
             MaxSamples = config.maxSampleDefault;
             SampleTime = config.sampleTimeDefault.ToString();
-            Url = config.urlDefault;
-            data.Add("sample_time", SampleTime.ToString());
-            data.Add("sample_amount", MaxSamples.ToString());
-            data.Add("url", Url.ToString());
+            Url = config.ipDefault;
+            data.Add("Sample_time", SampleTime.ToString());
+            data.Add("Sample_amount", MaxSamples.ToString());
+            data.Add("Ip", Url.ToString());
             string json = JsonConvert.SerializeObject(data);
             File.WriteAllText("config.json", json);
         }

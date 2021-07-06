@@ -120,46 +120,29 @@ namespace MultiWPFApp.ViewModel
             }
         }
 
-
         public DisplayViewModel()
         {
             config = new ConfigParams();
-            server = new ServerIoT(config.Url);
+            server = new ServerIoT(config.Ip);
             pixels = JsonConvert.DeserializeObject<PixelsData>(server.POSTgetPixels());
             ledDisplay = new LedDisplay(pixels.response);
             SelectedColor = new SolidColorBrush(ledDisplay.ActiveColor);
-            CommonButtonCommand = new ButtonCommandWithParameter(SetButtonColor);
+            CommonButtonCommand = new ButtonCommandWithParameter(ChangeColor);
             SendRequestCommand = new ButtonCommand(SendControlRequest);
             SendClearCommand = new ButtonCommand(ClearDisplay);
-            
         }
 
-        /**
-         * @brief Conversion method: LED indicator Name to LED x-y position
-         * @param name LED indicator Button Name propertie 
-         * @return Tuple with LED x-y position (0=x, 1=y)
-         */
         public (int, int) LedTagToIndex(string name)
         {
             return (int.Parse(name.Substring(3, 1)), int.Parse(name.Substring(4, 1)));
         }
 
-        /**
-         * @brief Conversion method: LED x-y position to LED indicator Name
-         * @param x LED horizontal position in display
-         * @param y LED vertical position in display
-         * @return LED indicator Button Name property
-         */
         public string LedIndexToTag(int i, int j)
         {
             return "LED" + i.ToString() + j.ToString();
         }
 
-        /**
-         * @brief LED indicator Click event handling procedure
-         * @param parameter LED indicator Button Name property
-         */
-        private void SetButtonColor(string parameter)
+        private void ChangeColor(string parameter)
         {
             // Set active color as background
             setColorHandler(parameter, SelectedColor.Color);
@@ -170,9 +153,6 @@ namespace MultiWPFApp.ViewModel
             Status = ledDisplay.status;
         }
 
-        /**
-         * @brief Clear button Click event handling procedure
-         */
         private async void ClearDisplay()
         {
             // Clear LED display GUI
@@ -187,9 +167,6 @@ namespace MultiWPFApp.ViewModel
             await server.PostControlRequest(ledDisplay.getClearPostData());
         }
 
-        /**
-         * @brief Send button Click event handling procedure
-         */
         private async void SendControlRequest()
         {
             await server.PostControlRequest(ledDisplay.getControlPostData());
