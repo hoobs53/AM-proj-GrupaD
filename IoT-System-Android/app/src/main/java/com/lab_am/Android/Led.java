@@ -39,13 +39,13 @@ import java.util.Vector;
 
 public class Led extends AppCompatActivity {
 
-    /* BEGIN widgets */
+    // Widgets
     SeekBar redSeekBar, greenSeekBar, blueSeekBar;
     TextView statusText;
     View colorView;     ///< Color preview
 
-    /* END widgets */
-    /* BEGIN colors */
+
+    // Colors
     int ledActiveColorA; ///< Active color Alpha components
     int ledActiveColorR; ///< Active color Red components
     int ledActiveColorG; ///< Active color Green components
@@ -58,15 +58,13 @@ public class Led extends AppCompatActivity {
 
     Integer[][][] ledDisplayModel = new Integer[8][8][3]; ///< LED display data model
     Integer[][][] currentLedDisplayModel = new Integer[8][8][3];
-    /* BEGIN colors */
 
-    /* BEGIN request */
+    // Request variables, IoT data
     private String ipAddress;
     String url;
     String url2;///< Default IoT server script URL
     private RequestQueue queue; ///< HTTP requests queue
     Map<String, String>  paramsClear = new HashMap<String, String>(); ///< HTTP POST data: clear display command
-    /* END request */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +83,7 @@ public class Led extends AppCompatActivity {
         ledActiveColorG = 0x00;
         ledActiveColorB = 0x00;
 
-        clearDisplayModel();
+        clearDisplay();
         /* END Color data initialization */
 
         /* BEGIN widgets initialization */
@@ -233,7 +231,7 @@ public class Led extends AppCompatActivity {
     /**
      * @brief LED display data model clear - fill with all components with Null
      */
-    public void clearDisplayModel() {
+    public void clearDisplay() {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ledDisplayModel[i][j][0] = null;
@@ -265,7 +263,8 @@ public class Led extends AppCompatActivity {
      * @brief LED indicator onClick event handling procedure
      * @param v LED indicator View element
      */
-    public void changeLedIndicatorColor(View v) {
+    //changeColor of colorView and ledDisplayModel
+    public void changeColor(View v) {
         // Set active color as background
         v.setBackgroundColor(ledActiveColor);
         colorView.setBackgroundColor(ledActiveColor);
@@ -280,6 +279,8 @@ public class Led extends AppCompatActivity {
         ledDisplayModel[x][y][2] = ledActiveColorB;
         setStatusText(checkIfChanged());
     }
+
+    //Information for user if data was send
     public void setStatusText(boolean condition){
         if(condition){
             statusText.setText("UNSAVED CHANGES!");
@@ -288,6 +289,8 @@ public class Led extends AppCompatActivity {
             statusText.setText("");
         }
     }
+
+    // Check if server's data is equal to app data
     public boolean checkIfChanged(){
         int r;
         int g;
@@ -323,6 +326,8 @@ public class Led extends AppCompatActivity {
      * @brief Clear button onClick event handling procedure
      * @param v Clear button element
      */
+
+    // Clear inputs
     public void clearAllLed(View v) {
         // Clear LED display GUI
         TableLayout tb = (TableLayout)findViewById(R.id.ledTable);
@@ -335,11 +340,13 @@ public class Led extends AppCompatActivity {
         }
 
         // Clear LED display data model
-        clearDisplayModel();
+        clearDisplay();
 
         // Clear physical LED display
         sendClearRequest();
     }
+
+    // Load temp's display colors to actuall LedDisplay
     public void loadLedColor(){
         TableLayout tb = (TableLayout)findViewById(R.id.ledTable);
         View ledInd;
@@ -385,8 +392,9 @@ public class Led extends AppCompatActivity {
     }
 
 
+    // Download server's data from sense emu
     private void getLeds(){
-        Settings.geturlled2(ipAddress);
+       url2 = Settings.geturlled2(ipAddress);
         RequestQueue queue2 = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
             @Override
@@ -398,9 +406,9 @@ public class Led extends AppCompatActivity {
                             String object = response.getString(counter).replace("[", "").replace("]", "");
                             String [] numArray = object.split(",");
                             counter++;
-                            currentLedDisplayModel[i][j][0] = Integer.parseInt(numArray[0]);
-                            currentLedDisplayModel[i][j][1] = Integer.parseInt(numArray[1]);
-                            currentLedDisplayModel[i][j][2] = Integer.parseInt(numArray[2]);
+                            currentLedDisplayModel[j][i][0] = Integer.parseInt(numArray[0]);
+                            currentLedDisplayModel[j][i][1] = Integer.parseInt(numArray[1]);
+                            currentLedDisplayModel[j][i][2] = Integer.parseInt(numArray[2]);
                         }
                     }
                     loadLedColor();
@@ -432,7 +440,7 @@ public class Led extends AppCompatActivity {
      */
     public void sendControlRequest(View v)
     {
-        Settings.geturlled(ipAddress);
+      url = Settings.geturlled(ipAddress);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
@@ -472,7 +480,7 @@ public class Led extends AppCompatActivity {
      */
     void sendClearRequest()
     {
-        Settings.geturlled(ipAddress);
+        url = Settings.geturlled(ipAddress);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {

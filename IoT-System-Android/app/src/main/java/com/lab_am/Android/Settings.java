@@ -43,7 +43,6 @@ public class Settings extends AppCompatActivity {
     public final static String FILE_CONFIG_LOAD = "/get_config.php";
     public final static String FILE_CONFIG_SAVE = "/save_params.php";
     public final static String FILE_NAME = "/resource.php";
-    public final static String FILE_NAME_RPY = "/cgi-bin/get_rpy.py";
     public final static String LED_BACKEND = "/cgi-bin/led_display.py";
     public final static String LED_BACKEND2 = "/cgi-bin/get_pixels.py";
     public final static String MEASUREMENTS = "/get_measurements.php";
@@ -54,6 +53,8 @@ public class Settings extends AppCompatActivity {
     EditText sampleAmountEditText;
     /* END config TextViews */
 
+
+    // initialize text in textviews, initialize buttons
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +66,9 @@ public class Settings extends AppCompatActivity {
         // get the Bundle that stores the data of this Activity
         Bundle configBundle = intent.getExtras();
 
+        //config buttons
          configureSaveBtn();
-         configureDefaultBtn();
+         setDefaultConfig();
 
         if(configBundle != null) {
             ipEditText = (EditText)findViewById(R.id.ipEditTextConfig);
@@ -82,16 +84,13 @@ public class Settings extends AppCompatActivity {
         }
 
         queue = Volley.newRequestQueue(Settings.this);
-        loadConfig(queue);
+        loadParams(queue);
     }
 
     public final static String geturlscript(String ip,String file){
         return ("http://" + ip + "/" + file);
     }
 
-    public final static String geturlrpy(String ip) {
-        return ("http://" + ip + "/" + Settings.FILE_NAME_RPY);
-    }
 
     public final static String geturlled(String ip) {
         return ("http://" + ip + "/" + Settings.LED_BACKEND);
@@ -105,28 +104,27 @@ public class Settings extends AppCompatActivity {
         return ("http://" + ip + "/" + Settings.MEASUREMENTS);
     }
 
+    //uptades textviews
     private void updateTextViews(){
         ipEditText.setText(CONFIG_IP_ADDRESS);
         sampleTimeEditText.setText(CONFIG_SAMPLE_TIME);
         sampleAmountEditText.setText(CONFIG_SAMPLE_AMOUNT);
     }
 
-    private void saveConfig(){
+    //Send saved config on the server in JSON format
+    private void setConfig(){
             url = Settings.geturlscript(CONFIG_IP_ADDRESS,FILE_CONFIG_SAVE);
             StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            // response
-                            // Log.d("Response", response);
-
+                           //handle response
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             // handle error
-                            //Log.d("Error.Response", response);
                         }
                     }
             ) {
@@ -143,9 +141,8 @@ public class Settings extends AppCompatActivity {
             queue.add(postRequest);
     }
 
-    public final static void loadConfig(RequestQueue queue){
-           // url = Settings.geturlscript(CONFIG_IP_ADDRESS,FILE_CONFIG_LOAD);
-
+    //Downloads config from servers config
+    public final static void loadParams(RequestQueue queue){
             String url2 = "http://" + CONFIG_IP_ADDRESS + "/" + FILE_CONFIG_LOAD;
             StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
                     new Response.Listener<String>() {
@@ -176,22 +173,27 @@ public class Settings extends AppCompatActivity {
             queue.add(postRequest);
     }
 
+    //save button config
      private void configureSaveBtn(){
         Button savebtn = (Button) findViewById(R.id.save_btn );
+        // onClick function
         savebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //On click, save user's inputs to variables
                 CONFIG_IP_ADDRESS = ipEditText.getText().toString();
                 CONFIG_SAMPLE_TIME = sampleTimeEditText.getText().toString();
                 CONFIG_SAMPLE_AMOUNT = sampleAmountEditText.getText().toString();
 
+                // Pack variables to bundle
                 Intent intent = new Intent();
                 intent.putExtra(CONFIG_IP_ADDRESS, ipEditText.getText().toString());
                 intent.putExtra(CONFIG_SAMPLE_TIME, sampleTimeEditText.getText().toString());
                 intent.putExtra(CONFIG_SAMPLE_AMOUNT, sampleAmountEditText.getText().toString());
+                //update textviews and send settings
                 updateTextViews();
-                saveConfig();
+                setConfig();
 
                 setResult(RESULT_OK, intent);
                 Toast.makeText(getApplicationContext(),"Settings saved",Toast.LENGTH_SHORT).show();
@@ -200,23 +202,25 @@ public class Settings extends AppCompatActivity {
         });
      }
 
-    private void configureDefaultBtn(){
+    private void setDefaultConfig(){
         Button default_btn = (Button) findViewById(R.id.default_btn);
         default_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //On click, save default settings to variables
                 CONFIG_IP_ADDRESS = DEFAULT_IP_ADDRESS;
                 CONFIG_SAMPLE_TIME = Integer.toString(DEFAULT_SAMPLE_TIME);
                 CONFIG_SAMPLE_AMOUNT = Integer.toString(DEFAULT_SAMPLE_AMOUNT);
 
-
+                // Pack variables to bundle
                 Intent intent = new Intent();
                 intent.putExtra(CONFIG_IP_ADDRESS, ipEditText.getText().toString());
                 intent.putExtra(CONFIG_SAMPLE_TIME, sampleTimeEditText.getText().toString());
                 intent.putExtra(CONFIG_SAMPLE_AMOUNT, sampleAmountEditText.getText().toString());
+                //update textviews and send settings
                 updateTextViews();
-                saveConfig();
+                setConfig();
 
                 setResult(RESULT_OK, intent);
                 Toast.makeText(getApplicationContext(),"Default settings set",Toast.LENGTH_SHORT).show();

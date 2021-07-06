@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         queue = Volley.newRequestQueue(MainActivity.this);
-        Settings.loadConfig(queue);
+        Settings.loadParams(queue);
     }
 
 
